@@ -11,12 +11,15 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.0.17",
+    "firebase": "^9.22.0",
     "framer-motion": "^10.12.4",
+    "nanoid": "^4.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.10.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.0.1",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "@typescript-eslint/eslint-plugin": "^5.59.1",
