@@ -26,11 +26,11 @@ function Header() {
           <SunIcon className="h-6 w-6" />
         </button>
         <button type="button" className="flex items-center rounded p-1">
-          Entrar
+          <UserIcon className="h-6 w-6" />
         </button>
       </div>
       <nav className="flex gap-2 border-b border-neutral-300 p-2 dark:border-neutral-800">
-        <button type="button">
+        <button type="button" className="flex items-center rounded p-1">
           <Bars3BottomLeftIcon className="h-6 w-6" />
         </button>
         <form onSubmit={handleSubmit} className="flex grow items-center gap-2">
@@ -44,11 +44,11 @@ function Header() {
             placeholder="O que procura?"
             className="grow bg-transparent p-2"
           />
-          <button type="submit">
+          <button type="submit" className="flex items-center rounded p-1">
             <MagnifyingGlassIcon className="h-6 w-6" />
           </button>
         </form>
-        <button type="button">
+        <button type="button" className="flex items-center rounded p-1">
           <ShoppingCartIcon className="h-6 w-6" />
         </button>
       </nav>
