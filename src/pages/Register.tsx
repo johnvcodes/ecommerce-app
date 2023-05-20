@@ -1,7 +1,6 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { ChangeEvent, FormEvent, useReducer, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FirebaseError } from "firebase/app";
 import { auth } from "../firebase/firebaseConfig";
 import getErrorMessage from "../utilities/get-error-message";
 
@@ -11,12 +10,14 @@ type RegisterState = {
   confirmPassword: string;
 };
 
-type RegisterAction = {
-  type: keyof RegisterState | "clear";
-  payload?: string;
-};
+type RegisterAction =
+  | {
+      type: keyof RegisterState;
+      payload: string;
+    }
+  | { type: "clear" };
 
-const registerValue = {
+const registerInitialValue = {
   email: "",
   password: "",
   confirmPassword: "",
@@ -27,18 +28,14 @@ const registerReducer = (
   action: RegisterAction
 ): RegisterState => {
   switch (action.type) {
-    case "clear":
-      return { email: "", password: "", confirmPassword: "" };
     case "email":
-      if (!action.payload) return state;
       return { ...state, email: action.payload };
     case "password":
-      if (!action.payload) return state;
       return { ...state, password: action.payload };
     case "confirmPassword":
-      if (!action.payload) return state;
       return { ...state, confirmPassword: action.payload };
-
+    case "clear":
+      return registerInitialValue;
     default:
       return state;
   }
@@ -46,9 +43,9 @@ const registerReducer = (
 
 function Register() {
   const navigate = useNavigate();
-  const [{ email, password, confirmPassword }, registerDispatch] = useReducer(
+  const [registerState, registerDispatch] = useReducer(
     registerReducer,
-    registerValue
+    registerInitialValue
   );
 
   const [registerError, setRegisterError] = useState<string>("");
@@ -63,16 +60,20 @@ function Register() {
 
   const handleRegisterSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    if (email.length <= 0 || !email.includes("@")) {
+    if (registerState.email.length <= 0 || !registerState.email.includes("@")) {
       return setRegisterError("Por favor insira um e-mail válido");
     }
-    if (password.length < 6)
+    if (registerState.password.length < 6)
       return setRegisterError("Senha deve conter mais que 6 caractéres");
-    if (password !== confirmPassword)
+    if (registerState.password !== registerState.confirmPassword)
       return setRegisterError("Senhas devem ser iguais");
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      await createUserWithEmailAndPassword(
+        auth,
+        registerState.email,
+        registerState.password
+      );
     } catch (error) {
       return setRegisterError(getErrorMessage(error));
     }
@@ -98,7 +99,7 @@ function Register() {
       </label>
       <input
         onChange={handleRegisterInput}
-        value={email}
+        value={registerState.email}
         type="email"
         name="email"
         id="email"
@@ -110,7 +111,7 @@ function Register() {
       </label>
       <input
         onChange={handleRegisterInput}
-        value={password}
+        value={registerState.password}
         type="password"
         name="password"
         id="password"
@@ -122,7 +123,7 @@ function Register() {
       </label>
       <input
         onChange={handleRegisterInput}
-        value={confirmPassword}
+        value={registerState.confirmPassword}
         type="password"
         name="confirmPassword"
         id="confirm-password"

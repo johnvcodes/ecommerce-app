@@ -9,26 +9,26 @@ type LoginState = {
   password: string;
 };
 
-type LoginAction = {
-  type: keyof LoginState | "clear";
-  payload?: string;
-};
+type LoginAction =
+  | {
+      type: keyof LoginState;
+      payload: string;
+    }
+  | { type: "clear" };
 
-const loginValue: LoginState = {
+const loginInitialValue: LoginState = {
   email: "",
   password: "",
 };
 
 const loginReducer = (state: LoginState, action: LoginAction): LoginState => {
   switch (action.type) {
-    case "clear":
-      return { email: "", password: "" };
     case "email":
-      if (!action.payload) return state;
       return { ...state, email: action.payload };
     case "password":
-      if (!action.payload) return state;
       return { ...state, password: action.payload };
+    case "clear":
+      return loginInitialValue;
     default:
       return state;
   }
@@ -36,9 +36,9 @@ const loginReducer = (state: LoginState, action: LoginAction): LoginState => {
 
 function Login() {
   const navigate = useNavigate();
-  const [{ email, password }, loginDispatch] = useReducer(
+  const [loginState, loginDispatch] = useReducer(
     loginReducer,
-    loginValue
+    loginInitialValue
   );
 
   const handleLoginInput = (event: ChangeEvent<HTMLInputElement>) => {
@@ -49,7 +49,11 @@ function Login() {
   const handleLoginSubmit = async (event: FormEvent) => {
     event.preventDefault();
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(
+        auth,
+        loginState.email,
+        loginState.password
+      );
     } catch (error) {
       return getErrorMessage(error);
     }
@@ -60,7 +64,7 @@ function Login() {
   return (
     <form
       onSubmit={handleLoginSubmit}
-      className="m-auto flex min-w-[20rem] flex-col gap-2"
+      className="m-auto flex min-w-[20rem] flex-col gap-2 rounded"
     >
       <h2 className="self-center font-bold uppercase tracking-widest">
         Entrar
@@ -70,7 +74,7 @@ function Login() {
       </label>
       <input
         onChange={handleLoginInput}
-        value={email}
+        value={loginState.email}
         type="email"
         name="email"
         id="email"
@@ -82,7 +86,7 @@ function Login() {
       </label>
       <input
         onChange={handleLoginInput}
-        value={password}
+        value={loginState.password}
         type="password"
         name="password"
         id="password"
