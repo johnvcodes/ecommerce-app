@@ -1,12 +1,14 @@
 import {
   Bars3BottomLeftIcon,
   MagnifyingGlassIcon,
+  BuildingStorefrontIcon,
   ShoppingCartIcon,
-  SunIcon,
-  UserIcon,
 } from "@heroicons/react/24/solid";
+
 import { FormEvent } from "react";
 import { Link } from "react-router-dom";
+import UserMenu from "./UserMenu";
+import ThemeButton from "./ThemeButton";
 
 function Header() {
   const handleSubmit = (event: FormEvent) => {
@@ -15,24 +17,29 @@ function Header() {
 
   return (
     <header className="grid">
-      <div className="flex gap-2 border-b border-neutral-300 p-2 dark:border-neutral-800">
+      <div className="flex gap-2 p-2">
         <Link
           to="/"
-          className="flex items-center gap-2 rounded p-1 font-mono font-bold uppercase tracking-widest"
+          className="flex items-center gap-2 rounded bg-blue-700 p-1 font-bold uppercase tracking-widest text-neutral-50"
         >
+          <BuildingStorefrontIcon aria-hidden className="h-6 w-6" />
           Shoppy
         </Link>
-        <button type="button" className="ml-auto flex items-center rounded p-1">
-          <SunIcon className="h-6 w-6" />
-        </button>
-        <button type="button" className="flex items-center rounded p-1">
-          <UserIcon className="h-6 w-6" />
-        </button>
+        <ThemeButton />
+        <UserMenu />
       </div>
-      <nav className="flex gap-2 border-b border-neutral-300 p-2 dark:border-neutral-800">
-        <button type="button" className="flex items-center rounded p-1">
+      <nav className="flex gap-2 border-y border-neutral-300 bg-blue-700 p-2 text-neutral-50 shadow-sm dark:border-neutral-700">
+        <button
+          type="button"
+          className="flex items-center rounded p-1 md:hidden"
+        >
           <Bars3BottomLeftIcon className="h-6 w-6" />
         </button>
+        <div className="hidden items-center gap-2 md:flex">
+          <Link to="/products">Início</Link>
+          <Link to="/products">Produtos</Link>
+          <Link to="/products">Sobre Nós</Link>
+        </div>
         <form onSubmit={handleSubmit} className="flex grow items-center gap-2">
           <label htmlFor="search-products" className="sr-only">
             O que procura?
