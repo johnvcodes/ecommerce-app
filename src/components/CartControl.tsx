@@ -10,7 +10,7 @@ import isClothingSize from "../utilities/is-clothing-size";
 
 function CartControl() {
   const { cart, total, dispatch } = useStore();
-  const [showCartMenu, setShowCartMenu] = useState<boolean>(true);
+  const [showCartMenu, setShowCartMenu] = useState<boolean>(false);
 
   const menuRef = useRef<HTMLDivElement>(null);
 
