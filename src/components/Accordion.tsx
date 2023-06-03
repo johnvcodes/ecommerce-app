@@ -1,9 +1,5 @@
-import {
-  ArrowDownIcon,
-  ChevronDownIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/solid";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import { ReactNode, useRef, useState } from "react";
 
 type Props = {
   title: string;

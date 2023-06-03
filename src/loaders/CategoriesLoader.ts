@@ -1,5 +1,5 @@
 import { useOutletContext } from "react-router-dom";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "../firebase/firebaseConfig";
 
 import { Categories, MainCategory, SubCategory } from "../@types/categories";

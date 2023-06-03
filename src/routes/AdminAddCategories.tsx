@@ -67,6 +67,7 @@ function AdminAddCategories() {
         setSubCategories(databaseSubCategories);
       }
     );
+    return () => unsubscribe();
   }, []);
 
   return (
