@@ -84,6 +84,7 @@ function Register() {
         uid: user.uid,
         displayName: user.displayName,
         email: user.email,
+        userRole: user,
       });
       await Promise.all([updateUserProfile, addUserToDatabase]);
     } catch (error) {

@@ -10,7 +10,7 @@ import {
 } from "react";
 import { useBeforeUnload } from "react-router-dom";
 import { User, onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { CartProduct } from "../@types/product";
 import { auth, firestore } from "../firebase/firebaseConfig";
 import getErrorMessage from "../utilities/get-error-message";
@@ -116,6 +116,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
 
 function StoreProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState<boolean>(true);
 
   const [cartState, cartDispatch] = useReducer(cartReducer, cartInitialValue);
@@ -136,6 +137,13 @@ function StoreProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
+        getDoc(doc(firestore, "users", user.uid))
+          .then((response) => {
+            if (!response.exists()) return;
+            if (response.data().userRole === "admin") setIsAdmin(true);
+          })
+          .catch((error) => getErrorMessage(error));
+
         getDoc(doc(firestore, "carts", user.uid))
           .then((response) => {
             if (!response.exists() || !response.data().cart) return;
