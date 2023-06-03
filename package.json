@@ -10,13 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource-variable/inter": "^5.0.1",
     "@heroicons/react": "^2.0.17",
     "firebase": "^9.22.0",
-    "framer-motion": "^10.12.4",
     "nanoid": "^4.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.10.0"
+    "react-router-dom": "^6.10.0",
+    "react-textarea-autosize": "^8.4.1"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.1",

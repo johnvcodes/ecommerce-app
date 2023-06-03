@@ -30,7 +30,7 @@ function ThemeButton() {
     <button
       onClick={handleChangeTheme}
       type="button"
-      className="ml-auto flex items-center rounded p-1"
+      className="p-1 transition-colors duration-300 hover:bg-slate-700"
     >
       {theme ? (
         <SunIcon className="h-6 w-6" />

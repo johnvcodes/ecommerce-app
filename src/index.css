@@ -1,3 +1,4 @@
+@import "@fontsource-variable/inter";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,5 +10,23 @@ body,
 }
 
 body {
-  @apply bg-neutral-200 text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50;
+  @apply bg-slate-100 font-inter text-slate-950 dark:bg-slate-950 dark:text-slate-50;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: red;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  @apply w-1;
+}
+
+*::-webkit-scrollbar-track {
+  @apply bg-slate-700;
+}
+
+*::-webkit-scrollbar-thumb {
+  @apply bg-slate-300;
 }

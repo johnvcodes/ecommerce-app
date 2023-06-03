@@ -62,53 +62,54 @@ function Login() {
   };
 
   return (
-    <form
-      onSubmit={handleLoginSubmit}
-      className="m-auto flex min-w-[20rem] flex-col gap-2 rounded"
-    >
-      <h2 className="self-center font-bold uppercase tracking-widest">
-        Entrar
-      </h2>
-      <label htmlFor="email" className="w-fit font-bold">
-        E-mail
-      </label>
-      <input
-        onChange={handleLoginInput}
-        value={loginState.email}
-        type="email"
-        name="email"
-        id="email"
-        placeholder="Ex: meu@email.com"
-        className="mb-2 flex items-center rounded border border-neutral-300 bg-neutral-50 p-4 shadow outline-none transition-colors duration-300 placeholder:text-neutral-500 hover:border-neutral-500 focus:border-neutral-500 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:border-neutral-500 dark:focus:border-neutral-500"
-      />
-      <label htmlFor="password" className="w-fit font-bold">
-        Senha
-      </label>
-      <input
-        onChange={handleLoginInput}
-        value={loginState.password}
-        type="password"
-        name="password"
-        id="password"
-        placeholder="Mínimo de 6 caractéres"
-        className="mb-2 flex items-center rounded border border-neutral-300 bg-neutral-50 p-4 shadow outline-none transition-colors duration-300 placeholder:text-neutral-500 hover:border-neutral-500 focus:border-neutral-500 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:border-neutral-500 dark:focus:border-neutral-500"
-      />
-      <button
-        type="submit"
-        className="mb-2 flex items-center self-center rounded bg-blue-700 px-4 py-2 font-bold uppercase text-neutral-50 shadow transition-colors duration-300 hover:bg-blue-500"
-      >
-        Confirmar
-      </button>
-      <span className="flex items-center gap-1 self-center text-neutral-500 dark:text-neutral-400">
-        Não possui uma conta?
-        <Link
-          to="/register"
-          className="font-bold text-blue-700 transition-colors duration-300 after:block after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-blue-500 after:transition-transform after:duration-300 hover:text-blue-500 hover:after:scale-x-100"
+    <div className="flex grow items-center justify-center">
+      <form onSubmit={handleLoginSubmit} className="flex flex-col gap-2">
+        <h2 className="self-center font-bold uppercase tracking-widest">
+          Entrar
+        </h2>
+        <label htmlFor="email" className="w-fit font-bold">
+          E-mail
+        </label>
+        <input
+          onChange={handleLoginInput}
+          value={loginState.email}
+          type="email"
+          name="email"
+          id="email"
+          placeholder="Ex: meu@email.com"
+          required
+          className="mb-2 flex items-center border border-slate-300 bg-slate-50 p-4 shadow outline-none transition-colors duration-300 placeholder:text-slate-500 hover:border-slate-500 focus:border-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-slate-500 dark:focus:border-slate-500"
+        />
+        <label htmlFor="password" className="w-fit font-bold">
+          Senha
+        </label>
+        <input
+          onChange={handleLoginInput}
+          value={loginState.password}
+          type="password"
+          name="password"
+          id="password"
+          placeholder="Mínimo de 6 caractéres"
+          required
+          className="mb-2 flex items-center border border-slate-300 bg-slate-50 p-4 shadow outline-none transition-colors duration-300 placeholder:text-slate-500 hover:border-slate-500 focus:border-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-slate-500 dark:focus:border-slate-500"
+        />
+        <button
+          type="submit"
+          className="mb-2 flex items-center self-center bg-orange-200 px-4 py-2 font-bold uppercase text-slate-950 shadow transition-colors duration-300 hover:bg-orange-300"
         >
-          Criar
-        </Link>
-      </span>
-    </form>
+          Confirmar
+        </button>
+        <span className="flex items-center gap-1 self-center text-slate-500 dark:text-slate-400">
+          Não possui uma conta?
+          <Link
+            to="/register"
+            className="font-bold text-orange-200 transition-colors duration-300 after:block after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-orange-300 after:transition-transform after:duration-300 hover:text-orange-300 hover:after:scale-x-100"
+          >
+            Criar
+          </Link>
+        </span>
+      </form>
+    </div>
   );
 }
 

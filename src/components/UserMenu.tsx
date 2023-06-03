@@ -1,15 +1,17 @@
-import { UserCircleIcon } from "@heroicons/react/24/solid";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
-import { useAuth } from "../contexts/AuthContext";
-import { auth } from "../firebase/firebaseConfig";
+import { UserIcon } from "@heroicons/react/24/solid";
+import { arrayUnion, doc, setDoc, updateDoc } from "firebase/firestore";
+import { auth, firestore } from "../firebase/firebaseConfig";
+
 import getErrorMessage from "../utilities/get-error-message";
+import { useStore } from "../contexts/StoreContext";
 
 function UserMenu() {
   const navigate = useNavigate();
 
-  const { currentUser } = useAuth();
+  const { currentUser, cart } = useStore();
 
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -23,6 +25,20 @@ function UserMenu() {
     }
   };
 
+  const handleSignOut = async () => {
+    if (!currentUser) return;
+    try {
+      await setDoc(doc(firestore, "carts", currentUser.uid), {
+        cart,
+      });
+      await signOut(auth);
+    } catch (error) {
+      getErrorMessage(error);
+    }
+
+    navigate("/");
+  };
+
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOut);
 
@@ -31,47 +47,50 @@ function UserMenu() {
     };
   });
 
-  const handleSignOut = async () => {
-    try {
-      await signOut(auth);
-    } catch (error) {
-      return getErrorMessage(error);
-    }
-    return navigate("/");
-  };
-
   return (
     <div ref={menuRef} className="relative flex items-center">
       <button
         onClick={handleShowUserMenu}
         type="button"
-        className="rounded-full"
+        className="p-1 transition-colors duration-300 hover:bg-slate-700"
       >
-        <UserCircleIcon className="h-8 w-8" />
+        <UserIcon className="h-6 w-6" />
       </button>
       {showUserMenu && (
-        <div className="absolute right-0 top-[calc(100%_+_0.5rem)] flex min-w-[7.5rem] flex-col rounded-b border-x border-b border-neutral-300 bg-neutral-100 py-1 dark:border-neutral-700 dark:bg-neutral-950">
+        <div className="absolute right-0 top-[calc(100%_+_0.5rem)] z-10 flex min-w-[7.5rem] flex-col justify-center border-x border-b border-slate-700 bg-slate-900 shadow-sm">
           {!currentUser ? (
             <>
               <Link
                 onClick={handleShowUserMenu}
                 to="/login"
-                className="px-2 py-1 transition-colors duration-300 hover:bg-blue-700"
+                className="p-2 text-center transition-colors duration-300 hover:bg-slate-800"
               >
                 Entrar
               </Link>
               <Link
                 onClick={handleShowUserMenu}
                 to="/register"
-                className="px-2 py-1 transition-colors duration-300 hover:bg-blue-700"
+                className="p-2 text-center transition-colors duration-300 hover:bg-slate-800"
               >
                 Criar Conta
               </Link>
             </>
           ) : (
-            <button onClick={handleSignOut} type="button">
-              Sair
-            </button>
+            <>
+              <Link
+                to="/profile"
+                className="p-2 text-center transition-colors duration-300 hover:bg-slate-800"
+              >
+                Perfil
+              </Link>
+              <button
+                onClick={handleSignOut}
+                type="button"
+                className="p-2 text-center transition-colors duration-300 hover:bg-slate-800"
+              >
+                Sair
+              </button>
+            </>
           )}
         </div>
       )}
