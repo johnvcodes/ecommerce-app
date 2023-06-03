@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { UserIcon } from "@heroicons/react/24/solid";
-import { arrayUnion, doc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { auth, firestore } from "../firebase/firebaseConfig";
 
 import getErrorMessage from "../utilities/get-error-message";
