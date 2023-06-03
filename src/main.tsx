@@ -26,6 +26,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import AdminLoader from "./loaders/AdminLoader";
 import AdminAddSubCategories from "./routes/AdminAddSubCategories";
 import CategoriesLoader from "./loaders/CategoriesLoader";
+import ProtectedAdminRoute from "./routes/ProtectedAdminRoute";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -47,15 +48,20 @@ const router = createBrowserRouter(
         <Route path="/profile" element={<Profile />} />
       </Route>
       <Route path="/cart" element={<Cart />} />
-      <Route path="/admin" element={<Admin />} loader={AdminLoader}>
-        <Route index element={<AdminProducts />} />
-        <Route path="/admin/categories" element={<AdminCategories />} />
-        <Route path="/admin/add-product" element={<AdminAddProduct />} />
-        <Route path="/admin/add-categories" element={<AdminAddCategories />} />
-        <Route
-          path="/admin/add-sub-categories"
-          element={<AdminAddSubCategories />}
-        />
+      <Route element={<ProtectedAdminRoute />}>
+        <Route path="/admin" element={<Admin />} loader={AdminLoader}>
+          <Route index element={<AdminProducts />} />
+          <Route path="/admin/categories" element={<AdminCategories />} />
+          <Route path="/admin/add-product" element={<AdminAddProduct />} />
+          <Route
+            path="/admin/add-categories"
+            element={<AdminAddCategories />}
+          />
+          <Route
+            path="/admin/add-sub-categories"
+            element={<AdminAddSubCategories />}
+          />
+        </Route>
       </Route>
       <Route path="/about" element={<About />} />
     </Route>

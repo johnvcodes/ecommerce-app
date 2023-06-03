@@ -29,6 +29,7 @@ type CartAction =
 
 type StoreContextType = {
   currentUser: User | null;
+  isAdmin: boolean;
   cart: CartProduct[];
   total: number;
   dispatch: Dispatch<CartAction>;
@@ -139,8 +140,16 @@ function StoreProvider({ children }: { children: ReactNode }) {
       if (user) {
         getDoc(doc(firestore, "users", user.uid))
           .then((response) => {
-            if (!response.exists()) return;
-            if (response.data().userRole === "admin") setIsAdmin(true);
+            if (!response.exists()) {
+              setDoc(doc(firestore, "users", user.uid), {
+                uid: user.uid,
+                displayName: user.displayName,
+                email: user.email,
+                userRole: "user",
+              }).catch((error) => getErrorMessage(error));
+            } else if (response.data().userRole === "admin") {
+              setIsAdmin(true);
+            }
           })
           .catch((error) => getErrorMessage(error));
 
@@ -170,11 +179,12 @@ function StoreProvider({ children }: { children: ReactNode }) {
   const value = useMemo(
     () => ({
       currentUser,
+      isAdmin,
       cart: cartState.cart,
       total: cartTotal,
       dispatch: cartDispatch,
     }),
-    [currentUser, cartState.cart, cartTotal]
+    [currentUser, isAdmin, cartState.cart, cartTotal]
   );
 
   return (

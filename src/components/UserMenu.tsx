@@ -11,7 +11,7 @@ import { useStore } from "../contexts/StoreContext";
 function UserMenu() {
   const navigate = useNavigate();
 
-  const { currentUser, cart } = useStore();
+  const { currentUser, isAdmin, cart } = useStore();
 
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -83,6 +83,14 @@ function UserMenu() {
               >
                 Perfil
               </Link>
+              {isAdmin && (
+                <Link
+                  to="/admin"
+                  className="p-2 text-center transition-colors duration-300 hover:bg-slate-800"
+                >
+                  Admin
+                </Link>
+              )}
               <button
                 onClick={handleSignOut}
                 type="button"

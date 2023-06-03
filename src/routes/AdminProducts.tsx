@@ -27,7 +27,7 @@ function AdminProducts() {
 
   return (
     <div className="grid grow gap-2">
-      <div className="grid grid-cols-6 gap-2 p-2">
+      <div className="grid grid-cols-2 gap-2 p-2 lg:grid-cols-6">
         {snapshotProducts.map((product) => (
           <div
             key={product.uid}
