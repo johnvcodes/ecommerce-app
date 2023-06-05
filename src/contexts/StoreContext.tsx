@@ -11,12 +11,7 @@ import {
 } from "react";
 import { useBeforeUnload } from "react-router-dom";
 import { User, onAuthStateChanged } from "firebase/auth";
-import {
-  FirestoreDataConverter,
-  doc,
-  getDoc,
-  setDoc,
-} from "firebase/firestore";
+import { FirestoreDataConverter, doc, getDoc } from "firebase/firestore";
 import { CartProduct } from "../@types/product";
 import { auth, firestore } from "../firebase/firebaseConfig";
 import getErrorMessage from "../utilities/get-error-message";
