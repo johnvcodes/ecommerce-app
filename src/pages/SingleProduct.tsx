@@ -2,6 +2,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { ChevronLeftIcon, ShoppingBagIcon } from "@heroicons/react/24/solid";
 
 import { useRef, useState } from "react";
+import { toast } from "react-toastify";
 import { useStore } from "../contexts/StoreContext";
 import ProductRating from "../components/ProductRating";
 import { CartProduct } from "../@types/product";
@@ -31,6 +32,7 @@ function SingleProduct() {
       errorRef.current?.scrollIntoView();
       return setError("Por favor, escolha um tamanho");
     }
+    toast(`Produto adicionado ao carrinho`, { type: "success" });
     return dispatch({
       type: "ADD_TO_CART",
       payload: { ...product, productSize } as CartProduct,

@@ -1,5 +1,6 @@
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import { useStore } from "../contexts/StoreContext";
 import isClothingSize from "../utilities/is-clothing-size";
 
@@ -13,6 +14,7 @@ function Cart() {
   };
 
   const handleRemoveFromCart = (productId: string) => {
+    toast("Produto removido do carrinho", { type: "error" });
     dispatch({ type: "REMOVE_FROM_CART", payload: productId });
   };
 
@@ -111,7 +113,7 @@ function Cart() {
               <h2 className="p-2">O carrinho está vazio</h2>
               <Link
                 to="/products"
-                className="w-fit justify-self-center border border-slate-300 p-1 transition-colors duration-300 hover:bg-slate-200 dark:border-slate-700 dark:hover:bg-slate-800"
+                className="flex w-fit items-center justify-self-center border border-slate-300 p-1 transition-colors duration-300 hover:bg-slate-200 dark:border-slate-700 dark:hover:bg-slate-800"
               >
                 Voltar aos produtos
               </Link>

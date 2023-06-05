@@ -5,6 +5,7 @@ import {
   PlusIcon,
   ShoppingBagIcon,
 } from "@heroicons/react/24/solid";
+import { toast } from "react-toastify";
 import { useStore } from "../contexts/StoreContext";
 import isClothingSize from "../utilities/is-clothing-size";
 
@@ -39,6 +40,7 @@ function CartControl() {
 
   const handleRemoveFromCart = (productId: string) => {
     dispatch({ type: "REMOVE_FROM_CART", payload: productId });
+    toast("Produto removido do carrinho", { type: "error" });
   };
 
   return (

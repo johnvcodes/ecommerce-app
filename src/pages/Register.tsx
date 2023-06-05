@@ -82,7 +82,7 @@ function Register() {
       });
       const addUserToDatabase = setDoc(doc(firestore, "users", user.uid), {
         uid: user.uid,
-        displayName: user.displayName,
+        displayName: registerState.username,
         email: user.email,
         userRole: "user",
       });

@@ -2,6 +2,7 @@ import {
   Dispatch,
   ReactNode,
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -10,7 +11,12 @@ import {
 } from "react";
 import { useBeforeUnload } from "react-router-dom";
 import { User, onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  FirestoreDataConverter,
+  doc,
+  getDoc,
+  setDoc,
+} from "firebase/firestore";
 import { CartProduct } from "../@types/product";
 import { auth, firestore } from "../firebase/firebaseConfig";
 import getErrorMessage from "../utilities/get-error-message";
@@ -29,7 +35,7 @@ type CartAction =
 
 type StoreContextType = {
   currentUser: User | null;
-  isAdmin: boolean;
+  userRole: "user" | "admin";
   cart: CartProduct[];
   total: number;
   dispatch: Dispatch<CartAction>;
@@ -115,9 +121,40 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
   }
 };
 
+type UserDoc = {
+  uid: string;
+  displayName: string;
+  email: string;
+  userRole: "user" | "admin";
+};
+
+type UserCart = {
+  cart: CartProduct[];
+};
+
+const userDocConverter: FirestoreDataConverter<UserDoc> = {
+  toFirestore(userDoc) {
+    return userDoc;
+  },
+  fromFirestore(snapshot, options) {
+    const data = snapshot.data(options);
+    return data as UserDoc;
+  },
+};
+
+const userCartConverter: FirestoreDataConverter<UserCart> = {
+  toFirestore(userCart) {
+    return userCart;
+  },
+  fromFirestore(snapshot, options) {
+    const data = snapshot.data(options);
+    return data as UserCart;
+  },
+};
+
 function StoreProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [userRole, setUserRole] = useState<"user" | "admin">("user");
   const [loading, setLoading] = useState<boolean>(true);
 
   const [cartState, cartDispatch] = useReducer(cartReducer, cartInitialValue);
@@ -127,42 +164,7 @@ function StoreProvider({ children }: { children: ReactNode }) {
   );
 
   useEffect(() => {
-    const localCart = localStorage.getItem("cart");
-    if (!localCart) return;
-    cartDispatch({
-      type: "GET_CART",
-      payload: JSON.parse(localCart) as CartProduct[],
-    });
-  }, []);
-
-  useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        getDoc(doc(firestore, "users", user.uid))
-          .then((response) => {
-            if (!response.exists()) {
-              setDoc(doc(firestore, "users", user.uid), {
-                uid: user.uid,
-                displayName: user.displayName,
-                email: user.email,
-                userRole: "user",
-              }).catch((error) => getErrorMessage(error));
-            } else if (response.data().userRole === "admin") {
-              setIsAdmin(true);
-            }
-          })
-          .catch((error) => getErrorMessage(error));
-
-        getDoc(doc(firestore, "carts", user.uid))
-          .then((response) => {
-            if (!response.exists() || !response.data().cart) return;
-            cartDispatch({
-              type: "GET_USER_CART",
-              payload: response.data().cart as CartProduct[],
-            });
-          })
-          .catch((error) => getErrorMessage(error));
-      }
       setCurrentUser(user);
       setLoading(false);
     });
@@ -172,6 +174,25 @@ function StoreProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
+  const getUserDoc = useCallback(async () => {
+    if (!currentUser) return;
+    const userDoc = await getDoc(
+      doc(firestore, "users", currentUser.uid).withConverter(userDocConverter)
+    );
+    if (!userDoc.exists()) return;
+    setUserRole(userDoc.data().userRole);
+    const userCart = await getDoc(
+      doc(firestore, "carts", currentUser.uid).withConverter(userCartConverter)
+    );
+    if (!userCart.exists()) return;
+    cartDispatch({ type: "GET_USER_CART", payload: userCart.data().cart });
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (!currentUser) return;
+    getUserDoc().catch((error) => getErrorMessage(error));
+  }, [currentUser, getUserDoc]);
+
   useBeforeUnload(() =>
     localStorage.setItem("cart", JSON.stringify(cartState.cart))
   );
@@ -179,12 +200,12 @@ function StoreProvider({ children }: { children: ReactNode }) {
   const value = useMemo(
     () => ({
       currentUser,
-      isAdmin,
+      userRole,
       cart: cartState.cart,
       total: cartTotal,
       dispatch: cartDispatch,
     }),
-    [currentUser, isAdmin, cartState.cart, cartTotal]
+    [currentUser, userRole, cartState.cart, cartTotal]
   );
 
   return (
