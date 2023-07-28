@@ -1,9 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/ReactToastify.css";
-import { StoreProvider } from "./contexts/StoreContext";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import { AuthProvider } from "./contexts/AuthContext";
 
 const contextClass = {
   success: "border-emerald-500 bg-emerald-300 text-emerald-900",
@@ -17,11 +15,9 @@ const contextClass = {
 // Images aspect ratio 8:12
 function App() {
   return (
-    <StoreProvider>
+    <AuthProvider>
       <div className="flex h-full flex-col">
-        <Header />
         <Outlet />
-        <Footer />
         <ToastContainer
           toastClassName={(toast) =>
             `${contextClass[toast?.type || "default"]}
@@ -34,7 +30,7 @@ function App() {
           autoClose={3000}
         />
       </div>
-    </StoreProvider>
+    </AuthProvider>
   );
 }
 

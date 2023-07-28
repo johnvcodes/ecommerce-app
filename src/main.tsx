@@ -6,8 +6,9 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
 import App from "./App";
-import "./index.css";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -15,61 +16,52 @@ import Products from "./pages/Products";
 import SingleProduct from "./pages/SingleProduct";
 import Cart from "./pages/Cart";
 import About from "./pages/About";
-import Admin from "./pages/Admin";
-import AdminAddProduct from "./routes/AdminAddProduct";
-import AdminProducts from "./routes/AdminProducts";
-import { SingleProductLoader } from "./loaders/SingleProductLoader";
-import AdminAddCategories from "./routes/AdminAddCategories";
-import AdminCategories from "./routes/AdminCategories";
 import Profile from "./pages/Profile";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import AdminLoader from "./loaders/AdminLoader";
-import AdminAddSubCategories from "./routes/AdminAddSubCategories";
-import CategoriesLoader from "./loaders/CategoriesLoader";
 import ProtectedAdminRoute from "./routes/ProtectedAdminRoute";
+import MainLayout from "./layouts/MainLayout";
+import AdminLayout from "./layouts/AdminLayout";
+import AdminProducts from "./pages/Admin/AdminProducts";
+import Categories from "./pages/Admin/Categories";
+import AdminAddProduct from "./pages/Admin/AdminAddProduct";
+import AuthLayout from "./layouts/AuthLayout";
+import AdminAllProducts from "./pages/Admin/AdminAllProducts";
+import "./index.css";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<App />}>
-      <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route
-        path="/products"
-        element={<Products />}
-        loader={CategoriesLoader}
-      />
-      <Route
-        path="/products/:productId"
-        element={<SingleProduct />}
-        loader={SingleProductLoader}
-      />
-      <Route element={<ProtectedRoute />}>
-        <Route path="/profile" element={<Profile />} />
+      <Route element={<MainLayout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/products/:productId" element={<SingleProduct />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/profile" element={<Profile />} />
+        </Route>
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/about" element={<About />} />
       </Route>
-      <Route path="/cart" element={<Cart />} />
+      <Route element={<AuthLayout />}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Route>
       <Route element={<ProtectedAdminRoute />}>
-        <Route path="/admin" element={<Admin />} loader={AdminLoader}>
-          <Route index element={<AdminProducts />} />
-          <Route path="/admin/categories" element={<AdminCategories />} />
-          <Route path="/admin/add-product" element={<AdminAddProduct />} />
-          <Route
-            path="/admin/add-categories"
-            element={<AdminAddCategories />}
-          />
-          <Route
-            path="/admin/add-sub-categories"
-            element={<AdminAddSubCategories />}
-          />
+        <Route element={<AdminLayout />}>
+          <Route path="/admin" element={<AdminProducts />}>
+            <Route index element={<AdminAllProducts />} />
+            <Route path="/admin/add-product" element={<AdminAddProduct />} />
+          </Route>
+          <Route path="/admin/categories" element={<Categories />} />
         </Route>
       </Route>
-      <Route path="/about" element={<About />} />
     </Route>
   )
 );
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>
 );

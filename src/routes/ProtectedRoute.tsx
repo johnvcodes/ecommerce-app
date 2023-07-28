@@ -1,9 +1,9 @@
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { useStore } from "../contexts/StoreContext";
+import { useAuth } from "../contexts/AuthContext";
 
 function ProtectedRoute() {
-  const { currentUser } = useStore();
+  const { currentUser } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {

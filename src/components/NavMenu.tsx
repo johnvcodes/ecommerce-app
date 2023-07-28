@@ -1,38 +1,23 @@
 import { NavLink } from "react-router-dom";
 
-function NavMenu() {
+type Props = { routes: { path: string; label: string }[] };
+
+function NavMenu({ routes }: Props) {
   return (
-    <nav className="hidden grow items-center justify-center  gap-4 md:flex">
-      <NavLink
-        to="/"
-        className={({ isActive }) =>
-          `${
-            isActive ? "text-orange-200" : ""
-          } font-medium transition-colors duration-300 hover:text-orange-200`
-        }
-      >
-        Início
-      </NavLink>
-      <NavLink
-        to="/products"
-        className={({ isActive }) =>
-          `${
-            isActive ? "text-orange-200" : ""
-          } font-medium transition-colors duration-300 hover:text-orange-200`
-        }
-      >
-        Produtos
-      </NavLink>
-      <NavLink
-        to="/about"
-        className={({ isActive }) =>
-          `${
-            isActive ? "text-orange-200" : ""
-          } font-medium transition-colors duration-300 hover:text-orange-200`
-        }
-      >
-        Sobre Nós
-      </NavLink>
+    <nav className="hidden grow items-center justify-center gap-2 md:flex">
+      {routes.map((route) => (
+        <NavLink
+          key={route.label}
+          to={route.path}
+          className={({ isActive }) =>
+            `${
+              isActive ? "text-blue-500" : "hover:after:scale-x-100 "
+            } relative flex items-center outline outline-2 outline-offset-0 outline-transparent transition-colors duration-300 after:absolute after:bottom-0 after:h-[0.0625rem] after:w-full after:scale-x-0 after:bg-blue-500 after:transition-transform after:duration-300 hover:text-blue-500  focus:text-blue-500 focus:after:scale-x-100`
+          }
+        >
+          {route.label}
+        </NavLink>
+      ))}
     </nav>
   );
 }

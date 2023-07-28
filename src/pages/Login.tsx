@@ -1,109 +1,97 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { ChangeEvent, FormEvent, useReducer } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { auth } from "../firebase/firebaseConfig";
-import getErrorMessage from "../utilities/get-error-message";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { TUserCredentials } from "../@types/user";
+import TextInput from "../components/TextInput";
+import getAuthError from "../firebase/users/auth-errors";
+import Divider from "../components/Divider";
+import { auth } from "../firebase/config";
+import Spinner from "../components/Spinner";
+import Button from "../components/Button";
 
-type LoginState = {
-  email: string;
-  password: string;
-};
-
-type LoginAction =
-  | {
-      type: keyof LoginState;
-      payload: string;
-    }
-  | { type: "clear" };
-
-const loginInitialValue: LoginState = {
-  email: "",
-  password: "",
-};
-
-const loginReducer = (state: LoginState, action: LoginAction): LoginState => {
-  switch (action.type) {
-    case "email":
-      return { ...state, email: action.payload };
-    case "password":
-      return { ...state, password: action.payload };
-    case "clear":
-      return loginInitialValue;
-    default:
-      return state;
-  }
-};
+type LoginState = Omit<TUserCredentials, "displayName">;
 
 function Login() {
+  const [authError, setAuthError] = useState<string>("");
+  const [authLoading, setAuthLoading] = useState<boolean>(false);
+
   const navigate = useNavigate();
-  const [loginState, loginDispatch] = useReducer(
-    loginReducer,
-    loginInitialValue
-  );
 
-  const handleLoginInput = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    return loginDispatch({ type: name as keyof LoginState, payload: value });
-  };
+  const {
+    register,
+    reset,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<LoginState>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
-  const handleLoginSubmit = async (event: FormEvent) => {
-    event.preventDefault();
+  const onSubmit: SubmitHandler<LoginState> = async (data) => {
+    const { email, password } = data;
+    setAuthLoading(true);
     try {
-      await signInWithEmailAndPassword(
-        auth,
-        loginState.email,
-        loginState.password
-      );
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate("/");
     } catch (error) {
-      return getErrorMessage(error);
+      setAuthError(getAuthError(error));
     }
-    loginDispatch({ type: "clear" });
-    return navigate("/");
+    reset();
+    setAuthLoading(false);
   };
 
   return (
-    <div className="flex grow items-center justify-center">
-      <form onSubmit={handleLoginSubmit} className="flex flex-col gap-2">
-        <h2 className="self-center font-bold uppercase tracking-widest">
-          Entrar
-        </h2>
-        <label htmlFor="email" className="w-fit font-bold">
-          E-mail
-        </label>
-        <input
-          onChange={handleLoginInput}
-          value={loginState.email}
+    <div className="container mx-auto flex grow items-center justify-center">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        autoComplete="off"
+        className="flex flex-col gap-4"
+      >
+        <h2 className="text-center uppercase text-blue-500">Entrar</h2>
+        <Divider />
+        {authError && (
+          <span className="text-center text-sm text-rose-500">{authError}</span>
+        )}
+        <TextInput
+          {...register("email", {
+            required: { value: true, message: "E-mail obrigatório" },
+          })}
           type="email"
-          name="email"
           id="email"
+          name="email"
+          label="E-mail"
           placeholder="Ex: meu@email.com"
-          required
-          className="mb-2 flex items-center border border-slate-300 bg-slate-50 p-4 shadow outline-none transition-colors duration-300 placeholder:text-slate-500 hover:border-slate-500 focus:border-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-slate-500 dark:focus:border-slate-500"
+          error={!!errors.email}
+          helperText={errors.email && errors.email.message}
         />
-        <label htmlFor="password" className="w-fit font-bold">
-          Senha
-        </label>
-        <input
-          onChange={handleLoginInput}
-          value={loginState.password}
+
+        <TextInput
+          {...register("password", {
+            required: { value: true, message: "Senha obrigatória" },
+          })}
           type="password"
-          name="password"
           id="password"
+          name="password"
+          label="Senha"
           placeholder="Mínimo de 6 caractéres"
-          required
-          className="mb-2 flex items-center border border-slate-300 bg-slate-50 p-4 shadow outline-none transition-colors duration-300 placeholder:text-slate-500 hover:border-slate-500 focus:border-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-slate-500 dark:focus:border-slate-500"
+          error={!!errors.password}
+          helperText={errors.password && errors.password.message}
         />
-        <button
+        <Button
           type="submit"
-          className="mb-2 flex items-center self-center bg-orange-200 px-4 py-2 font-bold uppercase text-slate-950 shadow transition-colors duration-300 hover:bg-orange-300"
+          disabled={authLoading}
+          aria-disabled={authLoading}
         >
-          Confirmar
-        </button>
-        <span className="flex items-center gap-1 self-center text-slate-500 dark:text-slate-400">
+          {authLoading ? <Spinner /> : "Confirmar"}
+        </Button>
+        <span className="flex items-center gap-1 self-center text-neutral-500">
           Não possui uma conta?
           <Link
             to="/register"
-            className="font-bold text-orange-200 transition-colors duration-300 after:block after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-orange-300 after:transition-transform after:duration-300 hover:text-orange-300 hover:after:scale-x-100"
+            className="relative flex items-center text-blue-500 outline outline-2 outline-offset-0 outline-transparent transition-colors duration-300 after:absolute after:bottom-0 after:h-[0.0625rem] after:w-full after:scale-x-0 after:bg-blue-500 after:transition-transform after:duration-300 hover:after:scale-x-100 focus:after:scale-x-100"
           >
             Criar
           </Link>

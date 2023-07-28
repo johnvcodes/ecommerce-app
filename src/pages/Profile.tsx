@@ -1,7 +1,7 @@
-import { useStore } from "../contexts/StoreContext";
+import { useAuth } from "../contexts/AuthContext";
 
 function Profile() {
-  const { currentUser } = useStore();
+  const { currentUser } = useAuth();
 
   return (
     <div className="flex grow items-center justify-center">

@@ -1,57 +1,76 @@
-import { Navigate, useNavigate } from "react-router-dom";
-import { ChevronLeftIcon, ShoppingBagIcon } from "@heroicons/react/24/solid";
-
-import { useRef, useState } from "react";
+/* eslint-disable react/jsx-no-bind */
+import { useCallback, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useStore } from "../contexts/StoreContext";
-import ProductRating from "../components/ProductRating";
-import { CartProduct } from "../@types/product";
-import { useSingleProduct } from "../loaders/SingleProductLoader";
-import ProductCarousel from "../components/ProductCarousel";
-import isClothingSize from "../utilities/is-clothing-size";
-import { ClothingSize, FootwearSize } from "../@types/sizes";
+import Select, { SingleValue } from "react-select";
+import { ChevronLeftIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
+import { TSize } from "../@types/size";
+import { TProduct } from "../@types/product";
+import { firestore } from "../firebase/config";
+import { useAppDispatch } from "../store/store";
+import { addToCart } from "../store/cartSlice";
+import { getProduct } from "../firebase/firestore/products";
+import ProductCarousel from "../components/Product/ProductCarousel";
+import ProductRating from "../components/Product/ProductRating";
+import Button from "../components/Button";
 
 function SingleProduct() {
-  const product = useSingleProduct();
-  const { dispatch } = useStore();
+  const { productId } = useParams();
+
+  const dispatch = useAppDispatch();
+
   const navigate = useNavigate();
 
-  const [productSize, setProductSize] = useState<ClothingSize | FootwearSize>();
-  const [error, setError] = useState("");
+  const [product, setProduct] = useState<TProduct | null>(null);
 
-  const errorRef = useRef<HTMLDivElement>(null);
+  const [selectedSize, setSelectedSize] = useState<TSize | null>(null);
 
-  const handlePickSize = (pickedSize: ClothingSize | FootwearSize) => {
-    if (productSize === pickedSize) return setProductSize(undefined);
-    setProductSize(pickedSize);
-    return setError("");
-  };
+  const [productError, setProductError] = useState("");
 
-  const handleAddToCart = () => {
-    if (!productSize) {
-      errorRef.current?.scrollIntoView();
-      return setError("Por favor, escolha um tamanho");
+  const getSingleProduct = useCallback(async () => {
+    if (!productId) return;
+    try {
+      const databaseProduct = await getProduct(firestore, productId);
+      setProduct(databaseProduct);
+    } catch (error) {
+      throw new Error(String(error));
     }
-    toast(`Produto adicionado ao carrinho`, { type: "success" });
-    return dispatch({
-      type: "ADD_TO_CART",
-      payload: { ...product, productSize } as CartProduct,
-    });
-  };
+  }, [productId]);
 
-  const handleGoBack = () => {
-    navigate(-1);
-  };
+  function handleChange(newValue: SingleValue<TSize>) {
+    setProductError("");
+    setSelectedSize(newValue);
+  }
+
+  function handleAddToCart() {
+    if (!product) return;
+    if (!selectedSize) {
+      setProductError("Selecione um tamanho");
+    } else {
+      toast(`Produto adicionado ao carrinho`, { type: "success" });
+      dispatch(addToCart({ ...product, selectedSize }));
+    }
+  }
+
+  function handleGoBack() {
+    return navigate(-1);
+  }
+
+  useEffect(() => {
+    getSingleProduct().catch((error) => {
+      throw new Error(String(error));
+    });
+  }, [getSingleProduct]);
 
   return product ? (
-    <div className="grid grow gap-2 py-5">
-      <div className="m-auto grid gap-2">
+    <div className="container mx-auto flex grow items-center justify-center py-2">
+      <div className="grid items-center gap-2">
         <button
           onClick={handleGoBack}
           type="button"
-          className="flex w-fit items-center gap-1 self-start border border-slate-300 py-1 pe-2 ps-1 transition-colors duration-300 hover:bg-slate-200 dark:border-slate-700 dark:hover:bg-slate-800"
+          className="flex h-fit w-fit items-center gap-1 rounded border border-neutral-300 bg-neutral-50 px-2 py-1 shadow-sm outline outline-2 outline-offset-0 outline-transparent transition-colors duration-300 hover:bg-neutral-200 focus:bg-neutral-200 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:focus:bg-neutral-700"
         >
-          <ChevronLeftIcon className="h-4 w-4" />
+          <ChevronLeftIcon aria-hidden className="h-4 w-4" />
           Voltar
         </button>
         <div className="grid gap-2 md:flex">
@@ -67,55 +86,61 @@ function SingleProduct() {
             <h2 className="font-medium uppercase">Descrição</h2>
             <p className="grow text-sm">{product.description}</p>
             <div className="grid gap-1">
-              {error && (
-                <div
-                  ref={errorRef}
-                  className="w-fit border border-red-500 bg-red-200 px-2 text-red-500"
-                >
-                  {error}
-                </div>
+              <label htmlFor="sizes">Tamanho</label>
+              <Select
+                onChange={handleChange}
+                options={product.sizes}
+                isClearable
+                inputId="sizes"
+                placeholder="Escolher tamanho"
+                unstyled
+                classNames={{
+                  control: ({ isFocused }) =>
+                    `${
+                      isFocused
+                        ? "border-blue-500 dark:border-blue-500"
+                        : "border-neutral-300 dark:border-neutral-700 hover:border-neutral-500 dark:hover:border-neutral-500"
+                    } border bg-neutral-50 w-60 dark:bg-neutral-900 p-2 rounded shadow-sm outline outline-transparent  outline-offset-0 outline-2 outline-dashed transition-all duration-300 `,
+                  option: ({ isFocused }) =>
+                    `${
+                      isFocused ? "bg-neutral-200 dark:bg-neutral-500" : ""
+                    } p-2`,
+                  clearIndicator: () =>
+                    "hover:text-red-500 transition-colors duration-300",
+                  placeholder: () => "text-neutral-500",
+                  indicatorSeparator: () =>
+                    "bg-neutral-300 dark:bg-neutral-700 mx-2",
+                  menu: () =>
+                    "bg-neutral-50 dark:bg-neutral-900 rounded overflow-hidden mt-1 border border-blue-500",
+                  valueContainer: () => "flex items-center gap-2",
+                  multiValue: () => "rounded overflow-hidden bg-blue-500",
+                  multiValueLabel: () => "px-2 text-neutral-50",
+                  multiValueRemove: () =>
+                    "grow hover:bg-blue-600 transition-colors text-neutral-50 duration-300 border-l p-1",
+                }}
+              />
+              {productError && (
+                <span className="text-xs text-rose-500">{productError}</span>
               )}
-              <div className="flex flex-wrap items-center gap-2">
-                {product.sizes.map((size) => (
-                  <button
-                    onClick={() => handlePickSize(size)}
-                    key={size.uid}
-                    type="button"
-                    className={`${
-                      size.uid === productSize?.uid
-                        ? "bg-slate-300 dark:bg-slate-700"
-                        : "hover:bg-slate-200 dark:hover:bg-slate-800"
-                    } h-10 w-10 overflow-hidden border  border-slate-300 transition-colors duration-300 dark:border-slate-700`}
-                  >
-                    {isClothingSize(size) && size.label
-                      ? size.label
-                      : size.value}
-                  </button>
-                ))}
-              </div>
             </div>
-            <div className="flex items-center justify-between">
+            <div className="grid items-center justify-start gap-2">
               <span className="flex items-center text-xl font-bold">
                 {Intl.NumberFormat("pt-BR", {
                   style: "currency",
                   currency: "BRL",
                 }).format(product.price)}
               </span>
-              <button
-                onClick={handleAddToCart}
-                type="button"
-                className="flex items-center gap-1 bg-orange-200 p-2 text-slate-950 transition-colors duration-300 hover:bg-orange-300"
-              >
+              <Button onClick={handleAddToCart} type="button">
                 Adicionar ao carrinho
                 <ShoppingBagIcon className="h-6 w-6" />
-              </button>
+              </Button>
             </div>
           </div>
         </div>
       </div>
     </div>
   ) : (
-    <Navigate to="/products" />
+    <p>Carregando produto...</p>
   );
 }
 

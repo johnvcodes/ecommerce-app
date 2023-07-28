@@ -10,7 +10,7 @@ body,
 }
 
 body {
-  @apply bg-slate-100 font-inter text-slate-950 dark:bg-slate-950 dark:text-slate-50;
+  @apply bg-neutral-100 font-inter text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50;
 }
 
 * {
@@ -23,9 +23,9 @@ body {
 }
 
 *::-webkit-scrollbar-track {
-  @apply bg-slate-700;
+  @apply bg-neutral-300 dark:bg-neutral-700;
 }
 
 *::-webkit-scrollbar-thumb {
-  @apply bg-slate-300;
+  @apply bg-neutral-500;
 }

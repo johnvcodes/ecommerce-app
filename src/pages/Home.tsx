@@ -1,85 +1,75 @@
 import { useEffect, useState } from "react";
-import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
-import { firestore } from "../firebase/firebaseConfig";
-import { Product } from "../@types/product";
-import ProductCard from "../components/ProductCard";
+import { Link } from "react-router-dom";
+import { limit, orderBy } from "firebase/firestore";
+import { TProduct } from "../@types/product";
+import { firestore } from "../firebase/config";
+import { getProducts } from "../firebase/firestore/products";
 import getErrorMessage from "../utilities/get-error-message";
+import ProductCard from "../components/Product/ProductCard";
+import Divider from "../components/Divider";
 
 function Home() {
   const [homeProducts, setHomeProducts] = useState<{
-    newestProducts: Product[];
-    highestRatedProducts: Product[];
+    newestProducts: TProduct[];
+    highestRatedProducts: TProduct[];
   }>({
     newestProducts: [],
     highestRatedProducts: [],
   });
+
   const [loading, setLoading] = useState(true);
 
-  const getHomeProducts = async () => {
-    const databaseNewestProducts: Product[] = [];
-    const databaseHighestRatedProducts: Product[] = [];
-
-    const getNewestProductsPromise = getDocs(
-      query(
-        collection(firestore, "products"),
-        orderBy("createdAt", "desc"),
-        limit(8)
-      )
-    );
-    const getHighestRatedProductsPromise = getDocs(
-      query(
-        collection(firestore, "products"),
-        orderBy("rating", "desc"),
-        limit(8)
-      )
-    );
-
-    const [getNewestProducts, getHighestRatedProducts] = await Promise.all([
-      getNewestProductsPromise,
-      getHighestRatedProductsPromise,
-    ]);
-
-    getNewestProducts.forEach((newestProduct) => {
-      if (!newestProduct.exists()) return;
-      databaseNewestProducts.push(newestProduct.data() as Product);
-    });
-    getHighestRatedProducts.forEach((highestRatedProduct) => {
-      if (!highestRatedProduct.exists()) return;
-      databaseHighestRatedProducts.push(highestRatedProduct.data() as Product);
-    });
-
-    setHomeProducts({
-      newestProducts: databaseNewestProducts,
-      highestRatedProducts: databaseHighestRatedProducts,
-    });
+  async function getHomeProducts() {
+    try {
+      const [
+        { databaseProducts: newestProducts },
+        { databaseProducts: highestRatedProducts },
+      ] = await Promise.all([
+        getProducts(firestore, [orderBy("createdAt", "desc"), limit(4)]),
+        getProducts(firestore, [orderBy("rating", "desc"), limit(4)]),
+      ]);
+      setHomeProducts({ newestProducts, highestRatedProducts });
+    } catch (error) {
+      throw new Error(String(error));
+    }
     setLoading(false);
-  };
+  }
 
   useEffect(() => {
     getHomeProducts().catch((error) => getErrorMessage(error));
   }, []);
+
   return !loading ? (
-    <div className="grid place-items-center p-2">
-      <div className="grid gap-2">
-        <div className="grid gap-2">
-          <h2 className="bg-orange-200 p-2 font-medium uppercase text-slate-950">
-            Mais novos
-          </h2>
-          <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
+    <div className="container mx-auto flex items-center justify-center p-4">
+      <div className="grid gap-4">
+        <div className="grid gap-4">
+          <h2 className="uppercase">Mais novos</h2>
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
             {homeProducts.newestProducts.map((product) => (
               <ProductCard key={product.uid} product={product} />
             ))}
           </div>
+          <Link
+            to="/products?sort=new"
+            className="flex w-fit items-center gap-2 self-center rounded bg-blue-500 px-4 py-2 text-neutral-50 shadow outline outline-2 outline-offset-0 outline-transparent transition-all duration-300 hover:bg-blue-600 focus:outline-blue-300 dark:focus:outline-blue-900"
+          >
+            Ver mais
+          </Link>
+          <Divider />
         </div>
-        <div className="grid gap-2">
-          <h2 className="bg-orange-200 p-2 font-medium uppercase text-slate-950">
-            Melhor avaliados
-          </h2>
-          <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
+        <div className="grid gap-4">
+          <h2 className="uppercase">Melhor avaliados</h2>
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
             {homeProducts.highestRatedProducts.map((product) => (
               <ProductCard key={product.uid} product={product} />
             ))}
           </div>
+          <Link
+            to="/products?sort=rating"
+            className="flex w-fit items-center gap-2 self-center rounded bg-blue-500 px-4 py-2 text-neutral-50 shadow outline outline-2 outline-offset-0 outline-transparent transition-all duration-300 hover:bg-blue-600 focus:outline-blue-300 dark:focus:outline-blue-900"
+          >
+            Ver mais
+          </Link>
         </div>
       </div>
     </div>

@@ -1,18 +1,18 @@
-import { ClothingSize, FootwearSize } from "./sizes";
+import { Timestamp } from "firebase/firestore";
 
-export type MainCategory = {
+export type TMainCategory = {
   uid: string;
-  name: string;
-  subCategories: string[];
+  title: string;
+  createdAt: Timestamp;
 };
 
-export type SubCategory = {
+export type TSubcategory = {
   uid: string;
-  name: string;
-  sizes: ClothingSize[] | FootwearSize[];
+  title: string;
+  createdAt: Timestamp;
 };
 
-export type Categories = {
-  mainCategories: MainCategory[];
-  subCategories: SubCategory[];
+export type TCategories = {
+  mainCategories: TMainCategory[];
+  subcategories: TSubcategory[];
 };

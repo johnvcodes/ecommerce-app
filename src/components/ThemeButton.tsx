@@ -1,21 +1,11 @@
-import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
-import { useEffect, useState } from "react";
+import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../store/store";
+import { toggleTheme } from "../store/themeSlice";
 
 function ThemeButton() {
-  const [theme, setTheme] = useState<boolean>(false);
-
-  function handleChangeTheme() {
-    setTheme(!theme);
-  }
-
-  useEffect(() => {
-    if (
-      localStorage.getItem("theme") === "dark" ||
-      (!localStorage.getItem("theme") &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches)
-    )
-      setTheme(true);
-  }, []);
+  const theme = useAppSelector((state) => state.themeReducer.darkMode);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (theme === true) {
@@ -28,9 +18,9 @@ function ThemeButton() {
 
   return (
     <button
-      onClick={handleChangeTheme}
+      onClick={() => dispatch(toggleTheme())}
       type="button"
-      className="p-1 transition-colors duration-300 hover:bg-slate-700"
+      className="flex items-center rounded p-1 outline outline-2 outline-offset-0 outline-transparent transition-colors duration-300 hover:bg-neutral-300 focus:bg-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
     >
       {theme ? (
         <SunIcon className="h-6 w-6" />

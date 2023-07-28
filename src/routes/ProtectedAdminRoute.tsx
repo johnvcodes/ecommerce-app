@@ -1,11 +1,9 @@
 import { Navigate, Outlet } from "react-router-dom";
-
-import { useStore } from "../contexts/StoreContext";
+import { useAuth } from "../contexts/AuthContext";
 
 function ProtectedAdminRoute() {
-  const { userRole } = useStore();
-
-  return userRole === "admin" ? <Outlet /> : <Navigate to="/" />;
+  // return userRole === "admin" ? <Outlet /> : <Navigate to="/" />;
+  return <Outlet />;
 }
 
 export default ProtectedAdminRoute;

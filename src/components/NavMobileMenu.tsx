@@ -1,8 +1,10 @@
-import { Bars3Icon } from "@heroicons/react/24/solid";
+import { Bars3Icon } from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
-function NavMobileMenu() {
+type Props = { routes: { path: string; label: string }[] };
+
+function NavMobileMenu({ routes }: Props) {
   const [showNavMobileMenu, setShowNavMobileMenu] = useState<boolean>(false);
 
   const menuRef = useRef<HTMLDivElement>(null);
@@ -29,33 +31,22 @@ function NavMobileMenu() {
       <button
         onClick={handleShowNavMobileMenu}
         type="button"
-        className="dura flex items-center p-1 transition-colors duration-300 hover:bg-slate-700"
+        className="flex items-center rounded p-1 outline outline-2 outline-offset-0 outline-transparent transition-colors duration-300 hover:bg-neutral-300 focus:bg-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
       >
         <Bars3Icon className="h-6 w-6" />
       </button>
       {showNavMobileMenu && (
-        <nav className="absolute right-0 top-[calc(100%_+_0.5rem)] z-10 flex min-w-[7.5rem] flex-col justify-center border-x border-b border-slate-700 bg-slate-900">
-          <Link
-            onClick={handleShowNavMobileMenu}
-            to="/"
-            className="p-2 text-center transition-colors duration-300 hover:bg-slate-800"
-          >
-            Início
-          </Link>
-          <Link
-            onClick={handleShowNavMobileMenu}
-            to="/products"
-            className="p-2 text-center transition-colors duration-300 hover:bg-slate-800"
-          >
-            Produtos
-          </Link>
-          <Link
-            onClick={handleShowNavMobileMenu}
-            to="/about"
-            className="p-2 text-center transition-colors duration-300 hover:bg-slate-800"
-          >
-            Sobre Nós
-          </Link>
+        <nav className="absolute left-0 top-[calc(100%_+_0.25rem)] z-10 flex min-w-[7.5rem] flex-col justify-center divide-y divide-neutral-300 overflow-hidden rounded border border-neutral-300 bg-neutral-50 py-1 shadow dark:divide-neutral-700 dark:border-neutral-700 dark:bg-neutral-900">
+          {routes.map((route) => (
+            <Link
+              key={route.label}
+              onClick={handleShowNavMobileMenu}
+              to={route.path}
+              className="p-1 text-center outline outline-2 outline-offset-0 outline-transparent transition-colors duration-300 hover:bg-neutral-300 focus:bg-neutral-300 active:bg-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:active:bg-neutral-600"
+            >
+              {route.label}
+            </Link>
+          ))}
         </nav>
       )}
     </div>

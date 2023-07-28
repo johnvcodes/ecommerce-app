@@ -1,103 +1,112 @@
-import { useLoaderData } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
-  DocumentData,
   QueryDocumentSnapshot,
-  collection,
-  getDocs,
   limit,
   orderBy,
-  query,
   startAfter,
 } from "firebase/firestore";
-import ProductCard from "../components/ProductCard";
-import ProductsFilter from "../components/ProductsFilter";
-
-import { firestore } from "../firebase/firebaseConfig";
-import getErrorMessage from "../utilities/get-error-message";
-import { Product } from "../@types/product";
-import { CategoriesContext } from "../loaders/CategoriesLoader";
+import { useAppSelector } from "../store/store";
+import { firestore } from "../firebase/config";
+import { getProducts } from "../firebase/firestore/products";
+import { TProduct } from "../@types/product";
+import ProductCard from "../components/Product/ProductCard";
+import ProductsFilter from "../components/Product/ProductsFilter";
+import Spinner from "../components/Spinner";
 
 function Products() {
-  const { categories } = useLoaderData() as CategoriesContext;
+  const [params] = useSearchParams();
+  const sortOptions = params.get("sort");
 
-  const [products, setProducts] = useState<Product[]>([]);
+  const { filter, subFilter } = useAppSelector((state) => state.filterReducer);
+
+  const [products, setProducts] = useState<TProduct[]>([]);
+
   const [startAfterDoc, setStartAfterDoc] =
-    useState<QueryDocumentSnapshot<DocumentData>>();
+    useState<QueryDocumentSnapshot<TProduct>>();
+
   const [isLastDoc, setIsLastDoc] = useState(false);
+
   const [loading, setLoading] = useState(true);
-  const pageSize = 8;
 
-  const [filter, setFilter] = useState<string>("");
-  const [subFilter, setSubFilter] = useState<string>("");
+  const [loadingMoreProducts, setLoadingMoreProducts] =
+    useState<boolean>(false);
 
-  const filteredProducts = products
+  function sortProducts(): TProduct[] {
+    if (sortOptions) {
+      if (sortOptions === "new") {
+        return products.sort(
+          (productA, productB) =>
+            productB.createdAt.toDate().valueOf() -
+            productA.createdAt.toDate().valueOf()
+        );
+      }
+
+      if (sortOptions === "rating") {
+        return products.sort(
+          (productA, productB) => productB.rating - productA.rating
+        );
+      }
+    }
+
+    return products;
+  }
+
+  const filteredProducts = sortProducts()
     .filter((product) => {
-      if (!filter || filter === "") return true;
-      return product.categories.includes(filter);
+      if (!filter) return true;
+      return product.categories.some((category) => category.uid === filter);
     })
     .filter((product) => {
-      if (!subFilter || subFilter.length === 0) return true;
-      return product.subCategory === subFilter;
+      if (!subFilter) return true;
+      return product.subcategory.uid === subFilter;
     });
 
-  const getProducts = () => {
-    getDocs(
-      query(
-        collection(firestore, "products"),
-        orderBy("title", "asc"),
-        limit(pageSize)
-      )
-    )
-      .then((queryProducts) => {
-        const lastDocument = queryProducts.docs[queryProducts.size - 1];
-        const databaseProducts: Product[] = [];
-        queryProducts.forEach((product) =>
-          databaseProducts.push(product.data() as Product)
-        );
-        setProducts(databaseProducts);
-        setStartAfterDoc(lastDocument);
-        setLoading(false);
-      })
-      .catch((error) => getErrorMessage(error));
-  };
+  const pageSize = 8;
 
-  const loadMoreProducts = () => {
-    getDocs(
-      query(
-        collection(firestore, "products"),
+  async function getAllProducts() {
+    try {
+      const { databaseProducts, lastDocument } = await getProducts(firestore, [
         orderBy("title", "asc"),
         limit(pageSize),
-        startAfter(startAfterDoc)
-      )
-    )
-      .then((doc) => {
-        const lastDocument = doc.docs[doc.size - 1];
-        const databaseProducts: Product[] = [];
+      ]);
 
-        doc.forEach((item) => {
-          if (!item.exists()) return;
-          databaseProducts.push(item.data() as Product);
-        });
-        setProducts((previous) => [...previous, ...databaseProducts]);
-        setStartAfterDoc(lastDocument);
-        setIsLastDoc(doc.size < 1);
-      })
-      .catch((error) => getErrorMessage(error));
-  };
+      setProducts(databaseProducts);
+      setStartAfterDoc(lastDocument);
+    } catch (error) {
+      throw new Error(String(error));
+    }
+
+    setLoading(false);
+  }
+
+  async function loadMoreProducts() {
+    setLoadingMoreProducts(true);
+    try {
+      const { databaseProducts, lastDocument, isLastDocument } =
+        await getProducts(firestore, [
+          limit(pageSize),
+          startAfter(startAfterDoc),
+        ]);
+
+      setProducts((previous) => [...previous, ...databaseProducts]);
+      setStartAfterDoc(lastDocument);
+      setIsLastDoc(isLastDocument);
+    } catch (error) {
+      throw new Error(String(error));
+    }
+    setLoadingMoreProducts(false);
+  }
 
   useEffect(() => {
-    getProducts();
+    getAllProducts().catch((error) => {
+      throw new Error(String(error));
+    });
   }, []);
+
   return !loading ? (
-    <div className="flex flex-col gap-2 p-2">
-      <ProductsFilter
-        categories={categories}
-        filter={filter}
-        setFilter={setFilter}
-        subFilter={subFilter}
-        setSubFilter={setSubFilter}
-      />
+    <div className="container mx-auto flex grow flex-col gap-2 p-2">
+      <ProductsFilter />
       <div className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4">
         {filteredProducts.map((product) => (
           <ProductCard key={product.uid} product={product} />
@@ -107,9 +116,9 @@ function Products() {
         <button
           onClick={loadMoreProducts}
           type="button"
-          className="border border-slate-300 p-2 transition-colors duration-300 hover:bg-slate-200 dark:border-slate-700 dark:hover:bg-slate-800"
+          className="flex items-center self-center rounded bg-blue-500 px-4 py-2 text-neutral-50 shadow outline outline-2 outline-offset-0 outline-transparent transition-all duration-300 hover:bg-blue-600 focus:outline-blue-300 dark:focus:outline-blue-900"
         >
-          Carregar mais produtos
+          {loadingMoreProducts ? <Spinner /> : "Carregar mais produtos"}
         </button>
       )}
     </div>

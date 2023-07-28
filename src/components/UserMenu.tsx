@@ -1,17 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
-import { UserIcon } from "@heroicons/react/24/solid";
-import { doc, setDoc } from "firebase/firestore";
-import { auth, firestore } from "../firebase/firebaseConfig";
-
+import { UserIcon } from "@heroicons/react/24/outline";
+import { useAuth } from "../contexts/AuthContext";
+import { auth } from "../firebase/config";
 import getErrorMessage from "../utilities/get-error-message";
-import { useStore } from "../contexts/StoreContext";
 
 function UserMenu() {
   const navigate = useNavigate();
 
-  const { currentUser, userRole, cart } = useStore();
+  const { currentUser, userRole } = useAuth();
 
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -28,9 +26,6 @@ function UserMenu() {
   const handleSignOut = async () => {
     if (!currentUser) return;
     try {
-      await setDoc(doc(firestore, "carts", currentUser.uid), {
-        cart,
-      });
       await signOut(auth);
     } catch (error) {
       getErrorMessage(error);
@@ -52,25 +47,25 @@ function UserMenu() {
       <button
         onClick={handleShowUserMenu}
         type="button"
-        className="p-1 transition-colors duration-300 hover:bg-slate-700"
+        className="flex items-center rounded p-1 outline outline-2 outline-offset-0 outline-transparent transition-colors duration-300 hover:bg-neutral-300 focus:bg-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
       >
         <UserIcon className="h-6 w-6" />
       </button>
       {showUserMenu && (
-        <div className="absolute right-0 top-[calc(100%_+_0.5rem)] z-10 flex min-w-[7.5rem] flex-col justify-center border-x border-b border-slate-700 bg-slate-900 shadow-sm">
+        <div className="absolute right-0 top-[calc(100%_+_0.25rem)] z-10 flex min-w-[7.5rem] flex-col justify-center divide-y divide-neutral-300 overflow-hidden rounded border border-neutral-300 bg-neutral-50 py-1 shadow dark:divide-neutral-700 dark:border-neutral-700 dark:bg-neutral-900">
           {!currentUser ? (
             <>
               <Link
                 onClick={handleShowUserMenu}
                 to="/login"
-                className="p-2 text-center transition-colors duration-300 hover:bg-slate-800"
+                className="p-1 text-center transition-colors duration-300 hover:bg-neutral-200 dark:hover:bg-neutral-700"
               >
                 Entrar
               </Link>
               <Link
                 onClick={handleShowUserMenu}
                 to="/register"
-                className="p-2 text-center transition-colors duration-300 hover:bg-slate-800"
+                className="p-1 text-center transition-colors duration-300 hover:bg-neutral-200 dark:hover:bg-neutral-700"
               >
                 Criar Conta
               </Link>
@@ -79,14 +74,14 @@ function UserMenu() {
             <>
               <Link
                 to="/profile"
-                className="p-2 text-center transition-colors duration-300 hover:bg-slate-800"
+                className="p-1 text-center transition-colors duration-300 hover:bg-neutral-200 dark:hover:bg-neutral-700"
               >
                 Perfil
               </Link>
               {userRole === "admin" && (
                 <Link
                   to="/admin"
-                  className="p-2 text-center transition-colors duration-300 hover:bg-slate-800"
+                  className="p-1 text-center transition-colors duration-300 hover:bg-neutral-200 dark:hover:bg-neutral-700"
                 >
                   Admin
                 </Link>
@@ -94,7 +89,7 @@ function UserMenu() {
               <button
                 onClick={handleSignOut}
                 type="button"
-                className="p-2 text-center transition-colors duration-300 hover:bg-slate-800"
+                className="p-1 text-center transition-colors duration-300 hover:bg-neutral-200 dark:hover:bg-neutral-700"
               >
                 Sair
               </button>

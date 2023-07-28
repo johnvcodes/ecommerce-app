@@ -1,21 +1,22 @@
 import { Timestamp } from "firebase/firestore";
-import { ClothingSize, FootwearSize } from "./sizes";
+import { TMainCategory, TSubcategory } from "./categories";
+import { TSize } from "./size";
 
-export type Product = {
+export type TProduct = {
   uid: string;
   title: string;
-  description: string;
-  categories: string[];
-  subCategory: string;
-  sizes: ClothingSize[] | FootwearSize[];
   price: number;
   stock: number;
+  categories: TMainCategory[];
+  subcategory: TSubcategory;
+  sizes: TSize[];
+  description: string;
   images: string[];
   rating: number;
   createdAt: Timestamp;
 };
 
-export type CartProduct = Product & {
-  productSize: ClothingSize | FootwearSize;
+export type TCartProduct = TProduct & {
+  selectedSize: TSize;
   quantity: number;
 };
