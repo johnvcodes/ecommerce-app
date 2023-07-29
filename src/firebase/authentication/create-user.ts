@@ -5,7 +5,7 @@ import {
 } from "firebase/auth";
 import { Firestore } from "firebase/firestore";
 import { TUserCredentials } from "../../@types/user";
-import createUserDoc from "../firestore/users";
+import { addUser } from "../firestore/users";
 
 async function createUser(
   auth: Auth,
@@ -19,7 +19,7 @@ async function createUser(
     updateProfile(user, {
       displayName,
     }),
-    createUserDoc(firestore, {
+    addUser(firestore, {
       uid: user.uid,
       displayName,
       email,

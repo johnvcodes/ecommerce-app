@@ -11,7 +11,7 @@ function CartMenu() {
     0
   );
 
-  const [showCartMenu, setShowCartMenu] = useState<boolean>(true);
+  const [showCartMenu, setShowCartMenu] = useState<boolean>(false);
 
   const menuRef = useRef<HTMLDivElement>(null);
 

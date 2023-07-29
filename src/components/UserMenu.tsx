@@ -9,7 +9,7 @@ import getErrorMessage from "../utilities/get-error-message";
 function UserMenu() {
   const navigate = useNavigate();
 
-  const { currentUser, userRole } = useAuth();
+  const { currentUser, userData } = useAuth();
 
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -78,7 +78,7 @@ function UserMenu() {
               >
                 Perfil
               </Link>
-              {userRole === "admin" && (
+              {userData?.role === "admin" && (
                 <Link
                   to="/admin"
                   className="p-1 text-center transition-colors duration-300 hover:bg-neutral-200 dark:hover:bg-neutral-700"

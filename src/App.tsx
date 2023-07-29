@@ -4,15 +4,14 @@ import "react-toastify/ReactToastify.css";
 import { AuthProvider } from "./contexts/AuthContext";
 
 const contextClass = {
-  success: "border-emerald-500 bg-emerald-300 text-emerald-900",
-  error: "border-rose-500 bg-rose-300 text-rose-900",
+  success: "bg-emerald-500",
+  error: "bg-rose-500",
   info: "bg-blue-500",
   warning: "bg-orange-500",
   default: "bg-indigo-500",
   dark: "bg-white-600 font-gray-300",
 };
 
-// Images aspect ratio 8:12
 function App() {
   return (
     <AuthProvider>
@@ -21,7 +20,7 @@ function App() {
         <ToastContainer
           toastClassName={(toast) =>
             `${contextClass[toast?.type || "default"]}
-            flex items-center gap-2 p-1 w-fit mx-auto
+            flex items-center gap-2 p-1 w-fit mx-auto text-neutral-50 rounded
            `
           }
           hideProgressBar

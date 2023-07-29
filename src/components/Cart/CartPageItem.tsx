@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import Select, { SingleValue } from "react-select";
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { TCartProduct } from "../../@types/product";
 import { useAppDispatch } from "../../store/store";
@@ -9,16 +8,11 @@ import {
   increaseQuantity,
   removeFromCart,
 } from "../../store/cartSlice";
-import { TSize } from "../../@types/size";
 
 type Props = { product: TCartProduct };
 
 function CartPageItem({ product }: Props) {
   const dispatch = useAppDispatch();
-
-  const [selectedSize, setSelectedSize] = useState<TSize | null>(
-    product.selectedSize
-  );
 
   function handleIncreaseQuantity(productUID: string) {
     dispatch(increaseQuantity(productUID));
@@ -34,78 +28,56 @@ function CartPageItem({ product }: Props) {
   }
 
   return (
-    <div className="flex gap-2">
-      <img src={product.images[0]} alt="" className="h-40" />
-      <div className="flex grow flex-col gap-1">
+    <div className="flex overflow-hidden rounded border border-neutral-300 bg-neutral-50 text-sm shadow-sm dark:border-neutral-700 dark:bg-neutral-900">
+      <div className="flex flex-col border-r border-neutral-300 dark:border-neutral-700">
+        <img src={product.images[0]} alt="" className="h-40 md:h-80" />
+        <button
+          onClick={() => handleRemoveFromCart(product.uid)}
+          type="button"
+          className="p-2 transition-colors duration-300 hover:bg-neutral-300 focus:bg-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+        >
+          Remover
+        </button>
+      </div>
+      <div className="flex grow flex-col gap-1 p-2">
         <div className="flex items-center justify-between">
-          <h3>{product.title}</h3>
-          <button
-            onClick={() => handleRemoveFromCart(product.uid)}
-            type="button"
+          <Link
+            to={`products/${product.uid}`}
+            className="relative flex items-center font-bold uppercase outline outline-2 outline-offset-0 outline-transparent transition-colors duration-300 after:absolute after:bottom-0 after:h-[0.0625rem] after:w-full after:scale-x-0 after:bg-blue-500 after:transition-transform after:duration-300 hover:text-blue-500 hover:after:scale-x-100 focus:text-blue-500 focus:after:scale-x-100"
           >
-            X
-          </button>
+            {product.title}
+          </Link>
+          <span>
+            {Intl.NumberFormat("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            }).format(product.price)}
+          </span>
         </div>
-        <span>
-          {Intl.NumberFormat("pt-BR", {
-            style: "currency",
-            currency: "BRL",
-          }).format(product.price * product.quantity)}
-        </span>
-        {/* <div>
-          <label htmlFor={`sizes-${product.uid}`} className="sr-only">
-            Tamanho
-          </label>
-          <Select
-            onChange={(newValue) => setSelectedSize(newValue)}
-            options={product.sizes}
-            value={selectedSize}
-            isSearchable={false}
-            isClearable={false}
-            inputId={`sizes-${product.uid}`}
-            placeholder="Escolher tamanho"
-            unstyled
-            classNames={{
-              control: ({ isFocused }) =>
-                `${
-                  isFocused
-                    ? "border-blue-500 dark:border-blue-500"
-                    : "border-neutral-300 dark:border-neutral-700 hover:border-neutral-500 dark:hover:border-neutral-500"
-                } border bg-neutral-50 w-20 dark:bg-neutral-900 px-2 py-1 rounded shadow-sm outlineoutline-transparent  outline-offset-0 outline-2 outline-dashed transition-all duration-300 `,
-              option: ({ isFocused }) =>
-                `${
-                  isFocused ? "bg-neutral-200 dark:bg-neutral-500" : ""
-                } px-2 py-1 flex items-center`,
-              clearIndicator: () =>
-                "hover:text-red-500 transition-colors duration-300",
-              placeholder: () => "text-neutral-500",
-              indicatorSeparator: () =>
-                "bg-neutral-300 dark:bg-neutral-700 mx-2",
-              menu: () =>
-                "bg-neutral-50 dark:bg-neutral-900 rounded border mt-1 border-blue-500 overflow-hidden",
-              menuList: () => "",
 
-              valueContainer: () => "flex items-center",
-              container: () => "w-20",
-            }}
-          />
-        </div> */}
-        <div className="flex items-center">
-          <button
-            onClick={() => handleDecreaseQuantity(product.uid)}
-            type="button"
-            className="border"
-          >
-            <MinusIcon className="h-4 w-4" />
-          </button>
-          <span className="border">{product.quantity}</span>
-          <button
-            onClick={() => handleIncreaseQuantity(product.uid)}
-            type="button"
-            className="h-full border"
-          >
-            <PlusIcon className="h-4 w-4" />
-          </button>
+        <div className="flex gap-1">
+          <h2>Tamanho:</h2>
+          <span>{product.selectedSize.label}</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <h3>Quantidade:</h3>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => handleDecreaseQuantity(product.uid)}
+              type="button"
+              className="flex aspect-square h-full items-center justify-center rounded outline outline-2 outline-offset-0 outline-transparent transition-all duration-300 hover:bg-neutral-300 focus:bg-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+            >
+              <MinusIcon className="h-4 w-4" />
+            </button>
+            <span>{product.quantity}</span>
+            <button
+              onClick={() => handleIncreaseQuantity(product.uid)}
+              type="button"
+              className="flex aspect-square h-full items-center justify-center rounded outline outline-2 outline-offset-0 outline-transparent transition-all duration-300 hover:bg-neutral-300 focus:bg-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+            >
+              <PlusIcon className="h-4 w-4" />
+            </button>
+          </div>
         </div>
       </div>
     </div>

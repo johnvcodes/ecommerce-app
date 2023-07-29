@@ -16,6 +16,7 @@ import Spinner from "../components/Spinner";
 
 function Products() {
   const [params] = useSearchParams();
+
   const sortOptions = params.get("sort");
 
   const { filter, subFilter } = useAppSelector((state) => state.filterReducer);
@@ -85,6 +86,7 @@ function Products() {
     try {
       const { databaseProducts, lastDocument, isLastDocument } =
         await getProducts(firestore, [
+          orderBy("title", "asc"),
           limit(pageSize),
           startAfter(startAfterDoc),
         ]);
@@ -105,9 +107,9 @@ function Products() {
   }, []);
 
   return !loading ? (
-    <div className="container mx-auto flex grow flex-col gap-2 p-2">
+    <div className="container mx-auto flex grow flex-col gap-4 p-4">
       <ProductsFilter />
-      <div className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {filteredProducts.map((product) => (
           <ProductCard key={product.uid} product={product} />
         ))}

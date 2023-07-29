@@ -4,7 +4,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { TUserCredentials } from "../@types/user";
 import TextInput from "../components/TextInput";
-import getAuthError from "../firebase/users/auth-errors";
+import getAuthError from "../firebase/authentication/errors";
 import Divider from "../components/Divider";
 import { auth } from "../firebase/config";
 import Spinner from "../components/Spinner";
