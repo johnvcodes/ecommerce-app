@@ -10,9 +10,11 @@ import { useAppSelector } from "../store/store";
 import { firestore } from "../firebase/config";
 import { getProducts } from "../firebase/firestore/products";
 import { TProduct } from "../@types/product";
-import ProductCard from "../components/Product/ProductCard";
-import ProductsFilter from "../components/Product/ProductsFilter";
+import { ChevronRight } from "lucide-react";
 import Spinner from "../components/Spinner";
+import ProductDisplay from "../components/ProductDisplay";
+import Button from "../components/Button";
+import ProductsHeader from "../components/ProductsHeader";
 
 function Products() {
   const [params] = useSearchParams();
@@ -39,13 +41,13 @@ function Products() {
         return products.sort(
           (productA, productB) =>
             productB.createdAt.toDate().valueOf() -
-            productA.createdAt.toDate().valueOf()
+            productA.createdAt.toDate().valueOf(),
         );
       }
 
       if (sortOptions === "rating") {
         return products.sort(
-          (productA, productB) => productB.rating - productA.rating
+          (productA, productB) => productB.rating - productA.rating,
         );
       }
     }
@@ -107,21 +109,18 @@ function Products() {
   }, []);
 
   return !loading ? (
-    <div className="container mx-auto flex grow flex-col gap-4 p-4">
-      <ProductsFilter />
-      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {filteredProducts.map((product) => (
-          <ProductCard key={product.uid} product={product} />
-        ))}
-      </div>
+    <div className="flex flex-col items-center gap-4 py-4">
+      <ProductsHeader />
+      <ProductDisplay products={filteredProducts} />
       {!isLastDoc && (
-        <button
+        <Button
           onClick={loadMoreProducts}
           type="button"
-          className="flex items-center self-center rounded bg-blue-500 px-4 py-2 text-neutral-50 shadow outline outline-2 outline-offset-0 outline-transparent transition-all duration-300 hover:bg-blue-600 focus:outline-blue-300 dark:focus:outline-blue-900"
+          size="small"
+          endIcon={<ChevronRight size={20} strokeWidth={1.5} />}
         >
           {loadingMoreProducts ? <Spinner /> : "Carregar mais produtos"}
-        </button>
+        </Button>
       )}
     </div>
   ) : (

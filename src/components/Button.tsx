@@ -1,17 +1,39 @@
-/* eslint-disable react/button-has-type */
-import { ComponentPropsWithoutRef } from "react";
+import { ElementType, ReactNode } from "react";
 
-type Props = Omit<ComponentPropsWithoutRef<"button">, "className">;
+export type Props<T extends ElementType> = {
+  component?: T;
+  variant?: "primary" | "secondary";
+  size?: "base" | "small";
+  startIcon?: ReactNode;
+  endIcon?: ReactNode;
+};
 
-function Button({ children, type, ...props }: Props) {
+const Button = <T extends ElementType = "button">({
+  component,
+  variant = "primary",
+  size = "base",
+  startIcon,
+  endIcon,
+  ...props
+}: Props<T> & Omit<React.ComponentPropsWithoutRef<T>, keyof Props<T>>) => {
+  const Component = component || "button";
+
   return (
-    <button
+    <Component
       {...props}
-      className="flex w-fit items-center gap-2 rounded border border-transparent bg-blue-500 px-4 py-2 text-neutral-50 shadow outline outline-2 outline-offset-0 outline-transparent transition-all duration-300 hover:bg-blue-600 focus:outline-blue-300 dark:focus:outline-blue-900"
+      className={`${
+        variant === "secondary"
+          ? "bg-neutral-100 hover:bg-neutral-200"
+          : "bg-primary text-neutral-50 hover:bg-primary/90"
+      } ${
+        size === "small" ? "px-2 py-1" : "px-3 py-2"
+      } flex items-center justify-center gap-2 transition-colors duration-300`}
     >
-      {children}
-    </button>
+      {startIcon}
+      {props.children}
+      {endIcon}
+    </Component>
   );
-}
+};
 
 export default Button;

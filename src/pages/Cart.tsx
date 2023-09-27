@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../store/store";
-import CartPageItem from "../components/Cart/CartPageItem";
+import CartPageItem from "../components/CartPageItem";
 
 function Cart() {
   const { cart, total } = useAppSelector((state) => state.cartReducer);

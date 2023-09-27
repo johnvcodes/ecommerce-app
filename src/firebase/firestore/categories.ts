@@ -24,20 +24,18 @@ const categoryConverter: FirestoreDataConverter<TMainCategory> = {
 
 async function addCategory(
   firestore: Firestore,
-  categoryData: Omit<TMainCategory, "uid" | "createdAt">
+  categoryData: Omit<TMainCategory, "uid" | "createdAt">,
 ) {
   const uid = nanoid(20);
-
-  const { title } = categoryData;
 
   try {
     await setDoc(
       doc(firestore, "categories", uid).withConverter(categoryConverter),
       {
         uid,
-        title,
+        ...categoryData,
         createdAt: Timestamp.now(),
-      }
+      },
     );
   } catch (error) {
     throw new Error(String(error));
@@ -46,13 +44,10 @@ async function addCategory(
 
 async function getCategories(firestore: Firestore) {
   const dataCollection: TMainCategory[] = [];
-  const collectionReference = query(
-    collection(firestore, "categories"),
-    orderBy("title", "asc")
-  );
+
   try {
     const data = await getDocs(
-      collectionReference.withConverter(categoryConverter)
+      collection(firestore, "categories").withConverter(categoryConverter),
     );
 
     data.forEach((item) => {

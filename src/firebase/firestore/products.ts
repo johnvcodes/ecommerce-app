@@ -30,7 +30,7 @@ function getRandomRating(max: number, min: number) {
 
 async function addProduct(
   firestore: Firestore,
-  productData: Omit<TProduct, "uid" | "rating" | "createdAt">
+  productData: Omit<TProduct, "uid" | "rating" | "createdAt">,
 ) {
   const uid = nanoid(20);
 
@@ -42,7 +42,7 @@ async function addProduct(
         ...productData,
         rating: getRandomRating(5, 3),
         createdAt: Timestamp.now(),
-      }
+      },
     );
   } catch (error) {
     throw new Error(String(error));
@@ -52,7 +52,7 @@ async function addProduct(
 async function getProduct(firestore: Firestore, productUID: string) {
   try {
     const data = await getDoc(
-      doc(firestore, "products", productUID).withConverter(productConverter)
+      doc(firestore, "products", productUID).withConverter(productConverter),
     );
     if (!data.exists()) {
       throw new Error(String("Produto não existente."));
@@ -65,7 +65,7 @@ async function getProduct(firestore: Firestore, productUID: string) {
 
 async function getProducts(
   firestore: Firestore,
-  constraints: QueryNonFilterConstraint[] = []
+  constraints: QueryNonFilterConstraint[] = [],
 ) {
   const databaseProducts: TProduct[] = [];
 
@@ -77,8 +77,8 @@ async function getProducts(
     const queryProducts = await getDocs(
       query(
         collection(firestore, "products").withConverter(productConverter),
-        ...constraints
-      )
+        ...constraints,
+      ),
     );
 
     queryProducts.forEach((product) => databaseProducts.push(product.data()));

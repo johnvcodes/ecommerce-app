@@ -1,9 +1,7 @@
 import { Link } from "react-router-dom";
-import UserMenu from "./UserMenu";
-import ThemeButton from "./ThemeButton";
-import NavMenu from "./NavMenu";
-import NavMobileMenu from "./NavMobileMenu";
-import CartControl from "./Cart/CartControl";
+import ActionUser from "./ActionUser";
+import ActionNav from "./ActionNav";
+import ActionBag from "./ActionBag";
 
 const routes = [
   {
@@ -11,29 +9,33 @@ const routes = [
     label: "Início",
   },
   {
-    path: "/products",
+    path: "/produtos",
     label: "Produtos",
   },
   {
-    path: "/about",
+    path: "/sobre",
     label: "Sobre nós",
   },
 ];
 
 function Header() {
   return (
-    <header className="flex items-center gap-2 border-b border-neutral-300 px-4 py-2 dark:border-neutral-700">
-      <NavMobileMenu routes={routes} />
-      <Link
-        to="/"
-        className="relative flex items-center font-bold uppercase tracking-widest outline outline-2 outline-offset-0 outline-transparent transition-colors duration-300 after:absolute after:bottom-0 after:h-[0.0625rem] after:w-full after:scale-x-0 after:bg-blue-500 after:transition-transform after:duration-300 hover:text-blue-500 hover:after:scale-x-100 focus:text-blue-500 focus:after:scale-x-100"
-      >
-        Vox Clothing
-      </Link>
-      <NavMenu routes={routes} />
-      <CartControl />
-      <ThemeButton />
-      <UserMenu />
+    <header className="flex h-14 items-center border-b border-neutral-300">
+      <nav className="container mx-auto flex w-full items-center justify-between px-6 py-4 md:px-0">
+        <Link to="/">North Star</Link>
+        <ul className="hidden gap-4 lg:flex">
+          {routes.map((route) => (
+            <li key={route.label}>
+              <Link to={route.path}>{route.label}</Link>
+            </li>
+          ))}
+        </ul>
+        <div className="flex items-center gap-4">
+          <ActionUser />
+          <ActionBag />
+          <ActionNav routes={routes} />
+        </div>
+      </nav>
     </header>
   );
 }

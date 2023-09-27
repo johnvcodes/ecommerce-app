@@ -1,4 +1,4 @@
-import { useAppSelector } from "../../store/store";
+import { useAppSelector } from "../store/store";
 import MobileCart from "./MobileCart";
 import CartMenu from "./CartMenu";
 

@@ -1,25 +1,24 @@
 /* eslint-disable react/jsx-no-bind */
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Select, { SingleValue } from "react-select";
-import { ChevronLeftIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
+import { ChevronLeft, PackagePlus } from "lucide-react";
 import { TSize } from "../@types/size";
 import { TProduct } from "../@types/product";
 import { firestore } from "../firebase/config";
 import { useAppDispatch } from "../store/store";
 import { addToCart } from "../store/cartSlice";
 import { getProduct } from "../firebase/firestore/products";
-import ProductCarousel from "../components/Product/ProductCarousel";
-import ProductRating from "../components/Product/ProductRating";
+import ProductCarousel from "../components/ProductCarousel";
+
 import Button from "../components/Button";
+import ProductRating from "../components/ProductRating";
 
 function SingleProduct() {
-  const { productId } = useParams();
+  const { id } = useParams();
 
   const dispatch = useAppDispatch();
-
-  const navigate = useNavigate();
 
   const [product, setProduct] = useState<TProduct | null>(null);
 
@@ -28,14 +27,14 @@ function SingleProduct() {
   const [productError, setProductError] = useState("");
 
   const getSingleProduct = useCallback(async () => {
-    if (!productId) return;
+    if (!id) return;
     try {
-      const databaseProduct = await getProduct(firestore, productId);
+      const databaseProduct = await getProduct(firestore, id);
       setProduct(databaseProduct);
     } catch (error) {
       throw new Error(String(error));
     }
-  }, [productId]);
+  }, [id]);
 
   function handleChange(newValue: SingleValue<TSize>) {
     setProductError("");
@@ -52,10 +51,6 @@ function SingleProduct() {
     }
   }
 
-  function handleGoBack() {
-    return navigate(-1);
-  }
-
   useEffect(() => {
     getSingleProduct().catch((error) => {
       throw new Error(String(error));
@@ -63,16 +58,15 @@ function SingleProduct() {
   }, [getSingleProduct]);
 
   return product ? (
-    <div className="container mx-auto flex grow items-center justify-center py-2">
-      <div className="grid items-center gap-2">
-        <button
-          onClick={handleGoBack}
-          type="button"
-          className="flex h-fit w-fit items-center gap-1 rounded border border-neutral-300 bg-neutral-50 px-2 py-1 shadow-sm outline outline-2 outline-offset-0 outline-transparent transition-colors duration-300 hover:bg-neutral-200 focus:bg-neutral-200 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:focus:bg-neutral-700"
+    <div className="container mx-auto flex items-center justify-center py-4">
+      <div className="flex flex-col items-start gap-2">
+        <Button
+          component={Link}
+          to={-1 as any}
+          startIcon={<ChevronLeft size={20} strokeWidth={1.5} />}
         >
-          <ChevronLeftIcon aria-hidden className="h-4 w-4" />
           Voltar
-        </button>
+        </Button>
         <div className="grid gap-2 md:flex">
           <ProductCarousel images={product.images} />
           <div className="flex w-80 flex-col gap-2">
@@ -132,7 +126,7 @@ function SingleProduct() {
               </span>
               <Button onClick={handleAddToCart} type="button">
                 Adicionar ao carrinho
-                <ShoppingBagIcon className="h-6 w-6" />
+                <PackagePlus size={20} strokeWidth={1.5} />
               </Button>
             </div>
           </div>

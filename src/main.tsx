@@ -7,6 +7,8 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import { Provider } from "react-redux";
+import "@fontsource-variable/inter";
+import "@fontsource/lato";
 import { store } from "./store/store";
 import App from "./App";
 import Home from "./pages/Home";
@@ -27,6 +29,31 @@ import AdminAddProduct from "./pages/Admin/AdminAddProduct";
 import AuthLayout from "./layouts/AuthLayout";
 import AdminAllProducts from "./pages/Admin/AdminAllProducts";
 import "./index.css";
+
+const browserRouter = createBrowserRouter([
+  {
+    element: <App />,
+    children: [
+      {
+        element: <MainLayout />,
+        children: [
+          { path: "/", element: <Home /> },
+          { path: "/produtos", element: <Products /> },
+          { path: "/produtos/:id", element: <SingleProduct /> },
+          { path: "/sacola", element: <Cart /> },
+          { path: "/sobre", element: <About /> },
+        ],
+      },
+      {
+        element: <AuthLayout />,
+        children: [
+          { path: "/entrar", element: <Login /> },
+          { path: "/criar-conta", element: <Register /> },
+        ],
+      },
+    ],
+  },
+]);
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -54,14 +81,14 @@ const router = createBrowserRouter(
           <Route path="/admin/categories" element={<Categories />} />
         </Route>
       </Route>
-    </Route>
-  )
+    </Route>,
+  ),
 );
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <RouterProvider router={browserRouter} />
     </Provider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

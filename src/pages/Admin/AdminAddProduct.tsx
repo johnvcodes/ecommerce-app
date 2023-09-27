@@ -83,11 +83,11 @@ function AdminAddProduct() {
       if (!data.images) return;
       const uploadURLS = await Promise.all(
         Array.from(data.images).map((image, index) =>
-          uploadBytes(ref(storage, `products/${uid}-${index + 1}`), image)
-        )
+          uploadBytes(ref(storage, `products/${uid}-${index + 1}`), image),
+        ),
       );
       const downloadURLS = await Promise.all(
-        uploadURLS.map((url) => getDownloadURL(url.ref))
+        uploadURLS.map((url) => getDownloadURL(url.ref)),
       );
       await addProduct(firestore, { ...data, images: downloadURLS });
     } catch (error) {
@@ -159,7 +159,7 @@ function AdminAddProduct() {
                 <Select
                   {...field}
                   options={categories}
-                  getOptionLabel={(options) => options.title}
+                  getOptionLabel={(options) => options.label}
                   getOptionValue={(options) => options.uid}
                   isClearable
                   isMulti
@@ -207,7 +207,7 @@ function AdminAddProduct() {
                 <Select
                   {...field}
                   options={subcategories}
-                  getOptionLabel={(options) => options.title}
+                  getOptionLabel={(options) => options.label}
                   getOptionValue={(options) => options.uid}
                   isClearable
                   maxMenuHeight={200}

@@ -1,26 +1,64 @@
-import { Link } from "react-router-dom";
+import {
+  ChevronsRight,
+  Copyright,
+  Facebook,
+  Instagram,
+  Linkedin,
+} from "lucide-react";
+import FooterList from "./FooterList";
+
+const productRoutes = ["Todos", "Novos", "Mais Vendidos", "Promoções"];
+const clientRoutes = [
+  "Entrega",
+  "Devolução",
+  "Pagamento",
+  "Segurança",
+  "Pedidos",
+];
+const companyRoutes = ["Sobre Nós", "Trabalhe Conosco", "Fale Conosco"];
 
 function Footer() {
   return (
-    <footer className="grid gap-2 border-t border-neutral-300 p-4 dark:border-neutral-700">
-      <Link
-        to="/"
-        className="relative flex w-fit items-center font-bold uppercase tracking-widest outline outline-2 outline-offset-0 outline-transparent transition-colors duration-300 after:absolute after:bottom-0 after:h-[0.0625rem] after:w-full after:scale-x-0 after:bg-blue-500 after:transition-transform after:duration-300 hover:text-blue-500 hover:after:scale-x-100 focus:text-blue-500 focus:after:scale-x-100"
-      >
-        Vox Clothing
-      </Link>
-      <div className="flex items-center gap-4">
-        <Link to="/" className="font-medium tracking-widest">
-          Início
-        </Link>
-        <Link to="/products" className="font-medium tracking-widest">
-          Produtos
-        </Link>
-        <Link to="/about" className="font-medium tracking-widest">
-          Sobre Nós
-        </Link>
-      </div>
-    </footer>
+    <div className="bg-neutral-200/30">
+      <footer className="container mx-auto grid gap-8 px-6 py-4 md:px-0">
+        <section className="grid grid-cols-2 gap-8 lg:grid-cols-4">
+          <FooterList title="Produtos" items={productRoutes} />
+          <FooterList title="Cliente" items={clientRoutes} />
+          <FooterList title="Empresa" items={companyRoutes} />
+          <form
+            onSubmit={(event) => event.preventDefault()}
+            className="flex flex-col gap-6"
+          >
+            <label htmlFor="contact" className="font-extrabold">
+              Fique por dentro
+            </label>
+            <div className="flex items-stretch">
+              <input
+                type="text"
+                name="contact"
+                id="contact"
+                placeholder="Inserir e-mail"
+                className="w-full border-b border-neutral-950 bg-transparent py-4"
+              />
+              <button type="submit">
+                <ChevronsRight />
+              </button>
+            </div>
+          </form>
+        </section>
+        <hr className="border-neutral-200" />
+        <section className="flex justify-between gap-4">
+          <h4 className="flex items-center gap-1">
+            <Copyright size={20} strokeWidth={1.5} /> 2023 North Star
+          </h4>
+          <div className="flex items-center gap-2">
+            <Instagram aria-label="Instagram" size={20} strokeWidth={1.5} />
+            <Facebook aria-label="Facebook" size={20} strokeWidth={1.5} />
+            <Linkedin aria-label="LinkedIn" size={20} strokeWidth={1.5} />
+          </div>
+        </section>
+      </footer>
+    </div>
   );
 }
 

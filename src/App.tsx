@@ -15,20 +15,18 @@ const contextClass = {
 function App() {
   return (
     <AuthProvider>
-      <div className="flex h-full flex-col">
-        <Outlet />
-        <ToastContainer
-          toastClassName={(toast) =>
-            `${contextClass[toast?.type || "default"]}
+      <Outlet />
+      <ToastContainer
+        toastClassName={(toast) =>
+          `${contextClass[toast?.type || "default"]}
             flex items-center gap-2 p-1 w-fit mx-auto text-neutral-50 rounded
            `
-          }
-          hideProgressBar
-          icon={false}
-          position="bottom-center"
-          autoClose={3000}
-        />
-      </div>
+        }
+        hideProgressBar
+        icon={false}
+        position="bottom-center"
+        autoClose={3000}
+      />
     </AuthProvider>
   );
 }
