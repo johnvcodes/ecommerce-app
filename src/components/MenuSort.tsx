@@ -10,7 +10,9 @@ type Props = {
 
 function MenuSort({ options }: Props) {
   const [showSort, setShowSort] = useState(false);
+
   const [searchParams, setSearchParams] = useSearchParams();
+
   const filterRef = useRef<HTMLDivElement>(null);
 
   function handleClickOut(event: MouseEvent) {
@@ -24,6 +26,7 @@ function MenuSort({ options }: Props) {
 
   function handleChangeSort(value: string) {
     const sortParams = searchParams.get("ordem");
+
     if (sortParams === value) {
       searchParams.delete("ordem");
       setSearchParams(searchParams);
@@ -31,6 +34,7 @@ function MenuSort({ options }: Props) {
       searchParams.set("ordem", value);
       setSearchParams(searchParams);
     }
+
     setShowSort(false);
   }
 

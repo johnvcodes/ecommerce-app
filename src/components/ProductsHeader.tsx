@@ -33,7 +33,7 @@ function ProductsHeader() {
 
   return (
     <div className="container mx-auto grid items-center gap-4 px-4 md:px-0">
-      <div className="md:hidden">
+      <div className="flex items-center gap-4 md:hidden">
         <DrawerFilter categories={categories} />
         <DrawerSort options={sortOptions} />
       </div>

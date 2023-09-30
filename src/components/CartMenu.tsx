@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { ShoppingBagIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
-import { useAppSelector } from "../../store/store";
+
 import CartProduct from "./CartItems";
+import { useAppSelector } from "../store/store";
 
 function CartMenu() {
   const cart = useAppSelector((state) => state.cartReducer.cart);
   const total = cart.reduce(
     (accumulator, product) => accumulator + product.price * product.quantity,
-    0
+    0,
   );
 
   const [showCartMenu, setShowCartMenu] = useState<boolean>(false);

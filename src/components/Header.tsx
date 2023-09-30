@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import ActionUser from "./ActionUser";
 import ActionNav from "./ActionNav";
-import ActionBag from "./ActionBag";
+import ActionCart from "./ActionCart";
 
 const routes = [
   {
@@ -20,7 +20,7 @@ const routes = [
 
 function Header() {
   return (
-    <header className="flex h-14 items-center border-b border-neutral-300">
+    <header className="flex h-14 items-center border-b border-neutral-200 bg-neutral-50">
       <nav className="container mx-auto flex w-full items-center justify-between px-6 py-4 md:px-0">
         <Link to="/">North Star</Link>
         <ul className="hidden gap-4 lg:flex">
@@ -32,7 +32,7 @@ function Header() {
         </ul>
         <div className="flex items-center gap-4">
           <ActionUser />
-          <ActionBag />
+          <ActionCart />
           <ActionNav routes={routes} />
         </div>
       </nav>

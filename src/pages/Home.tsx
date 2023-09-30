@@ -34,7 +34,7 @@ function Home() {
   }, []);
 
   return (
-    <>
+    <div className="grid gap-8">
       <Hero />
       <ProductDisplay
         title="Mais novos"
@@ -47,7 +47,7 @@ function Home() {
         description="Os produtos mais vendidos da loja"
         products={products.highestRatedProducts}
       />
-    </>
+    </div>
   );
 }
 

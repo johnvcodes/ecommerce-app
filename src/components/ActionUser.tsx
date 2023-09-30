@@ -2,9 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { User } from "lucide-react";
-import { useAuth } from "../contexts/AuthContext";
 import { auth } from "../firebase/config";
+import { useAuth } from "../contexts/AuthContext";
 import getErrorMessage from "../utilities/get-error-message";
+import Button from "./Button";
 import IconButton from "./IconButton";
 import Menu from "./Menu";
 
@@ -62,30 +63,47 @@ function ActionUser() {
           </IconButton>
         }
       >
-        {!userData ? (
-          <>
-            <Link
-              to=""
-              className="p-2 transition-colors duration-300 hover:bg-neutral-200"
-            >
-              Entrar
-            </Link>
-            <Link
-              to=""
-              className="p-2 transition-colors duration-300 hover:bg-neutral-200"
-            >
-              Criar Conta
-            </Link>
-          </>
-        ) : (
-          <button
-            onClick={handleSignOut}
-            type="button"
-            className="p-2 transition-colors duration-300 hover:bg-neutral-200"
-          >
-            Sair
-          </button>
-        )}
+        <div className="grid">
+          {!userData ? (
+            <>
+              <Button
+                component={Link}
+                to="/entrar"
+                variant="secondary"
+                size="small"
+              >
+                Entrar
+              </Button>
+              <Button
+                component={Link}
+                to="/criar-conta"
+                variant="secondary"
+                size="small"
+              >
+                Criar Conta
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                component={Link}
+                to="/perfil"
+                variant="secondary"
+                size="small"
+              >
+                Perfil
+              </Button>
+              <Button
+                onClick={handleSignOut}
+                type="button"
+                variant="secondary"
+                size="small"
+              >
+                Sair
+              </Button>
+            </>
+          )}
+        </div>
       </Menu>
     </div>
   );

@@ -42,6 +42,10 @@ const browserRouter = createBrowserRouter([
           { path: "/produtos/:id", element: <SingleProduct /> },
           { path: "/sacola", element: <Cart /> },
           { path: "/sobre", element: <About /> },
+          {
+            element: <ProtectedRoute />,
+            children: [{ path: "/perfil", element: <Profile /> }],
+          },
         ],
       },
       {
@@ -58,20 +62,6 @@ const browserRouter = createBrowserRouter([
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<App />}>
-      <Route element={<MainLayout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/products/:productId" element={<SingleProduct />} />
-        <Route element={<ProtectedRoute />}>
-          <Route path="/profile" element={<Profile />} />
-        </Route>
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/about" element={<About />} />
-      </Route>
-      <Route element={<AuthLayout />}>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-      </Route>
       <Route element={<ProtectedAdminRoute />}>
         <Route element={<AdminLayout />}>
           <Route path="/admin" element={<AdminProducts />}>

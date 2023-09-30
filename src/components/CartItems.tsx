@@ -1,13 +1,13 @@
 import { toast } from "react-toastify";
 import { MinusIcon, PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { TCartProduct } from "../../@types/product";
-import { useAppDispatch } from "../../store/store";
+import { TCartProduct } from "../@types/product";
+import { useAppDispatch } from "../store/store";
 import {
   decreaseQuantity,
   increaseQuantity,
   removeFromCart,
-} from "../../store/cartSlice";
-import Divider from "../Divider";
+} from "../store/cartSlice";
+import Divider from "./Divider";
 
 type Props = {
   product: TCartProduct;

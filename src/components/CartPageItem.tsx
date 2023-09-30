@@ -1,6 +1,5 @@
-import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { Minus, Plus, Trash2 } from "lucide-react";
 import { useAppDispatch } from "../store/store";
 import { TCartProduct } from "../@types/product";
 import {
@@ -8,6 +7,7 @@ import {
   increaseQuantity,
   removeFromCart,
 } from "../store/cartSlice";
+import IconButton from "./IconButton";
 
 type Props = { product: TCartProduct };
 
@@ -28,56 +28,57 @@ function CartPageItem({ product }: Props) {
   }
 
   return (
-    <div className="flex overflow-hidden rounded border border-neutral-300 bg-neutral-50 text-sm shadow-sm dark:border-neutral-700 dark:bg-neutral-900">
-      <div className="flex flex-col border-r border-neutral-300 dark:border-neutral-700">
-        <img src={product.images[0]} alt="" className="h-40 md:h-80" />
-        <button
-          onClick={() => handleRemoveFromCart(product.uid)}
-          type="button"
-          className="p-2 transition-colors duration-300 hover:bg-neutral-300 focus:bg-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-        >
-          Remover
-        </button>
-      </div>
-      <div className="flex grow flex-col gap-1 p-2">
-        <div className="flex items-center justify-between">
-          <Link
-            to={`products/${product.uid}`}
-            className="relative flex items-center font-bold uppercase outline outline-2 outline-offset-0 outline-transparent transition-colors duration-300 after:absolute after:bottom-0 after:h-[0.0625rem] after:w-full after:scale-x-0 after:bg-blue-500 after:transition-transform after:duration-300 hover:text-blue-500 hover:after:scale-x-100 focus:text-blue-500 focus:after:scale-x-100"
-          >
+    <div className="flex max-h-60 bg-neutral-50">
+      <img src={product.images[0]} />
+      <div className="flex grow flex-col gap-2 p-2">
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-lg font-extrabold leading-normal text-primary">
             {product.title}
-          </Link>
-          <span>
-            {Intl.NumberFormat("pt-BR", {
-              style: "currency",
-              currency: "BRL",
-            }).format(product.price)}
           </span>
+          <IconButton onClick={() => handleRemoveFromCart(product.uid)}>
+            <Trash2 size={20} strokeWidth={1.5} />
+          </IconButton>
         </div>
 
-        <div className="flex gap-1">
-          <h2>Tamanho:</h2>
-          <span>{product.selectedSize.label}</span>
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-extrabold">Tamanho:</span>
+          <p className="text-sm">{product.selectedSize.label}</p>
         </div>
-        <div className="flex items-center gap-1">
-          <h3>Quantidade:</h3>
-          <div className="flex items-center gap-1">
-            <button
+        <div className="mt-auto flex items-center gap-2 border-t border-neutral-200">
+          <span className="text-sm font-extrabold">Quantidade:</span>
+          <div className="flex items-center gap-2">
+            <IconButton
               onClick={() => handleDecreaseQuantity(product.uid)}
               type="button"
-              className="flex aspect-square h-full items-center justify-center rounded outline outline-2 outline-offset-0 outline-transparent transition-all duration-300 hover:bg-neutral-300 focus:bg-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
             >
-              <MinusIcon className="h-4 w-4" />
-            </button>
-            <span>{product.quantity}</span>
-            <button
+              <Minus size={16} strokeWidth={1.5} />
+            </IconButton>
+            <span className="text-sm">{product.quantity}</span>
+            <IconButton
               onClick={() => handleIncreaseQuantity(product.uid)}
               type="button"
-              className="flex aspect-square h-full items-center justify-center rounded outline outline-2 outline-offset-0 outline-transparent transition-all duration-300 hover:bg-neutral-300 focus:bg-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
             >
-              <PlusIcon className="h-4 w-4" />
-            </button>
+              <Plus size={16} strokeWidth={1.5} />
+            </IconButton>
           </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-extrabold">Preço:</span>
+          <p className="text-sm">
+            {Intl.NumberFormat("pt-br", {
+              currency: "BRL",
+              style: "currency",
+            }).format(product.price)}
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-extrabold">Total:</span>
+          <p className="text-sm">
+            {Intl.NumberFormat("pt-br", {
+              currency: "BRL",
+              style: "currency",
+            }).format(product.price * product.quantity)}
+          </p>
         </div>
       </div>
     </div>

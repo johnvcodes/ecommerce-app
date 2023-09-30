@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { auth, firestore } from "../firebase/config";
 import { TUserCredentials } from "../@types/user";
 import createUser from "../firebase/authentication/create-user";
 import getAuthError from "../firebase/authentication/errors";
-import TextInput from "../components/TextInput";
-import Divider from "../components/Divider";
-import { auth, firestore } from "../firebase/config";
-import Spinner from "../components/Spinner";
 import Button from "../components/Button";
+import Spinner from "../components/Spinner";
+import TextInput from "../components/TextInput";
 
 type RegisterValues = TUserCredentials & {
   confirmPassword: string;
@@ -48,14 +47,15 @@ function Register() {
   };
 
   return (
-    <div className="container mx-auto flex grow items-center justify-center">
+    <div className="container mx-auto flex h-[calc(100vh_-_3.5rem)]">
       <form
         onSubmit={handleSubmit(onSubmit)}
         autoComplete="off"
-        className="flex flex-col gap-4"
+        className="m-auto flex min-w-[20rem] flex-col gap-6 bg-neutral-50 p-4 shadow-sm"
       >
-        <h2 className="text-center uppercase text-blue-500">Crie sua conta</h2>
-        <Divider />
+        <h2 className="text-center font-extrabold uppercase text-primary">
+          Crie sua conta
+        </h2>
         {authError && (
           <span className="text-center text-sm text-rose-500">{authError}</span>
         )}
@@ -143,8 +143,8 @@ function Register() {
         <span className="flex items-center gap-1 self-center text-neutral-500">
           Já possui uma conta?
           <Link
-            to="/login"
-            className="relative flex items-center text-blue-500 outline outline-2 outline-offset-0 outline-transparent transition-colors duration-300 after:absolute after:bottom-0 after:h-[0.0625rem] after:w-full after:scale-x-0 after:bg-blue-500 after:transition-transform after:duration-300 hover:after:scale-x-100 focus:after:scale-x-100"
+            to="/entrar"
+            className="relative flex items-center text-primary outline outline-2 outline-offset-0 outline-transparent transition-colors duration-300 after:absolute after:bottom-0 after:h-[0.0625rem] after:w-full after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:after:scale-x-100 focus:after:scale-x-100"
           >
             Entrar
           </Link>

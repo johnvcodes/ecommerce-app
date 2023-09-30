@@ -20,7 +20,7 @@ function ProductDisplay({ title, description, products }: Props) {
           {description}
         </p>
       )}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="grid auto-rows-fr grid-cols-2 gap-4 lg:grid-cols-4">
         {products.map((product) => (
           <ProductCard key={product.uid} product={product} />
         ))}
