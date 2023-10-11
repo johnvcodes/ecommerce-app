@@ -1,12 +1,12 @@
 import { toast } from "react-toastify";
-import { Minus, Plus, Trash2 } from "lucide-react";
+import { IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
 import { useAppDispatch } from "../store/store";
-import { TCartProduct } from "../@types/product";
 import {
   decreaseQuantity,
   increaseQuantity,
   removeFromCart,
 } from "../store/cartSlice";
+import { TCartProduct } from "../@types/product";
 import IconButton from "./IconButton";
 
 type Props = { product: TCartProduct };
@@ -35,11 +35,13 @@ function CartPageItem({ product }: Props) {
           <span className="text-lg font-extrabold leading-normal text-primary">
             {product.title}
           </span>
-          <IconButton onClick={() => handleRemoveFromCart(product.uid)}>
-            <Trash2 size={20} strokeWidth={1.5} />
+          <IconButton
+            onClick={() => handleRemoveFromCart(product.uid)}
+            title="Remover item da sacola"
+          >
+            <IconTrash strokeWidth={1.5} />
           </IconButton>
         </div>
-
         <div className="flex items-center gap-2">
           <span className="text-sm font-extrabold">Tamanho:</span>
           <p className="text-sm">{product.selectedSize.label}</p>
@@ -51,14 +53,14 @@ function CartPageItem({ product }: Props) {
               onClick={() => handleDecreaseQuantity(product.uid)}
               type="button"
             >
-              <Minus size={16} strokeWidth={1.5} />
+              <IconMinus size={16} strokeWidth={1.5} />
             </IconButton>
             <span className="text-sm">{product.quantity}</span>
             <IconButton
               onClick={() => handleIncreaseQuantity(product.uid)}
               type="button"
             >
-              <Plus size={16} strokeWidth={1.5} />
+              <IconPlus size={16} strokeWidth={1.5} />
             </IconButton>
           </div>
         </div>

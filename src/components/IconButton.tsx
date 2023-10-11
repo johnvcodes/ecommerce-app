@@ -17,7 +17,10 @@ const IconButton = <T extends ElementType = "button">({
   const Component = component || "button";
 
   return (
-    <Component {...props} className="flex items-center">
+    <Component
+      {...props}
+      className="flex items-center p-1 transition-colors duration-300 hover:bg-neutral-950/10"
+    >
       {props.children}
     </Component>
   );

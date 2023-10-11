@@ -3,7 +3,9 @@ import {
   Dispatch,
   ReactNode,
   SetStateAction,
+  useRef,
 } from "react";
+import useClickAway from "../hooks/useClickAway";
 
 type Props = Omit<ComponentPropsWithoutRef<"div">, "className"> & {
   isOpen: boolean;
@@ -21,8 +23,12 @@ function Menu({
 }: Props) {
   const { children, ...rest } = props;
 
+  const ref = useRef<HTMLDivElement>(null);
+
+  useClickAway(ref, setIsOpen);
+
   return (
-    <div className="relative" {...rest}>
+    <div ref={ref} {...rest} className="relative">
       {handler}
       <div
         id={props["aria-controls"]}

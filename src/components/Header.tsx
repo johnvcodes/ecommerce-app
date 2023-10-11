@@ -30,7 +30,7 @@ function Header() {
             </li>
           ))}
         </ul>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-1">
           <ActionUser />
           <ActionCart />
           <ActionNav routes={routes} />

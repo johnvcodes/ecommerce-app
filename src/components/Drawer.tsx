@@ -3,9 +3,9 @@ import {
   Dispatch,
   ReactNode,
   SetStateAction,
-  useEffect,
   useRef,
 } from "react";
+import useClickAway from "../hooks/useClickAway";
 
 type Props = Omit<ComponentPropsWithRef<"div">, "className"> & {
   isOpen: boolean;
@@ -25,17 +25,7 @@ function Drawer({
   const { children, ...rest } = props;
   const ref = useRef<HTMLDivElement>(null);
 
-  function handleClickOutside(event: MouseEvent) {
-    if (ref.current && !ref.current.contains(event.target as Node))
-      setIsOpen(false);
-  }
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  });
+  useClickAway(ref, setIsOpen);
 
   return (
     <div>

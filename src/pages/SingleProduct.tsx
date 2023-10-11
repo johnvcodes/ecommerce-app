@@ -3,17 +3,16 @@ import { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Select, { SingleValue } from "react-select";
-import { ChevronLeft, PackagePlus } from "lucide-react";
+import { IconChevronLeft, IconShoppingBagCheck } from "@tabler/icons-react";
 import { TSize } from "../@types/size";
 import { TProduct } from "../@types/product";
 import { firestore } from "../firebase/config";
 import { useAppDispatch } from "../store/store";
 import { addToCart } from "../store/cartSlice";
 import { getProduct } from "../firebase/firestore/products";
-import ProductCarousel from "../components/ProductCarousel";
-
 import Button from "../components/Button";
-import ProductRating from "../components/ProductRating";
+import ProductCarousel from "../components/ProductCarousel";
+import Rating from "../components/Rating";
 
 function SingleProduct() {
   const { id } = useParams();
@@ -63,7 +62,7 @@ function SingleProduct() {
         <Button
           component={Link}
           to={-1 as any}
-          startIcon={<ChevronLeft size={20} strokeWidth={1.5} />}
+          startIcon={<IconChevronLeft strokeWidth={1.5} />}
         >
           Voltar
         </Button>
@@ -74,7 +73,7 @@ function SingleProduct() {
               {product.title}
             </h1>
             <div className="flex justify-between">
-              <ProductRating rating={product.rating} />
+              <Rating rating={product.rating} />
               <span className="opacity-50">Em estoque: {product.stock}</span>
             </div>
             <h2 className="font-medium uppercase">Descrição</h2>
@@ -126,7 +125,7 @@ function SingleProduct() {
               </span>
               <Button onClick={handleAddToCart} type="button">
                 Adicionar ao carrinho
-                <PackagePlus size={20} strokeWidth={1.5} />
+                <IconShoppingBagCheck strokeWidth={1.5} />
               </Button>
             </div>
           </div>

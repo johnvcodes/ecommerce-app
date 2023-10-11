@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
+import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 
 type Props = {
   images: string[];
@@ -51,14 +51,14 @@ function ProductCarousel({ images }: Props) {
             type="button"
             className="flex items-center  bg-neutral-50 p-1 text-neutral-950 outline outline-2 outline-offset-0 outline-transparent transition-colors hover:bg-neutral-300 focus:bg-neutral-300"
           >
-            <ChevronLeftIcon className="h-4 w-4" />
+            <IconChevronLeft size={20} strokeWidth={1.5} />
           </button>
           <button
             onClick={nextImage}
             type="button"
             className="flex items-center  bg-neutral-50 p-1 text-neutral-950 outline outline-2 outline-offset-0 outline-transparent transition-colors hover:bg-neutral-300 focus:bg-neutral-300"
           >
-            <ChevronRightIcon className="h-4 w-4" />
+            <IconChevronRight size={20} strokeWidth={1.5} />
           </button>
         </div>
         <div className="absolute bottom-2 left-2 flex gap-1">

@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ShoppingBag } from "lucide-react";
+import { IconShoppingBag } from "@tabler/icons-react";
 import { useAppSelector } from "../store/store";
+import CartPageItem from "./CartPageItem";
 import IconButton from "./IconButton";
 import Menu from "./Menu";
-import CartPageItem from "./CartPageItem";
 
 function ActionCart() {
   const [isOpen, setIsOpen] = useState(true);
@@ -14,7 +14,7 @@ function ActionCart() {
     <>
       <div className="lg:hidden">
         <IconButton component={Link} to="/sacola">
-          <ShoppingBag size={24} strokeWidth={1.5} />
+          <IconShoppingBag strokeWidth={1.5} />
         </IconButton>
       </div>
       <div className="hidden lg:block">
@@ -24,7 +24,7 @@ function ActionCart() {
           position="right"
           handler={
             <IconButton onClick={() => setIsOpen(!isOpen)} type="button">
-              <ShoppingBag size={24} strokeWidth={1.5} />
+              <IconShoppingBag strokeWidth={1.5} />
             </IconButton>
           }
         >

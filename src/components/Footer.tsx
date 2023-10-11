@@ -1,11 +1,13 @@
+import { Link } from "react-router-dom";
 import {
-  ChevronsRight,
-  Copyright,
-  Facebook,
-  Instagram,
-  Linkedin,
-} from "lucide-react";
-import FooterList from "./FooterList";
+  IconBrandFacebook,
+  IconBrandInstagram,
+  IconBrandLinkedin,
+  IconChevronsRight,
+  IconCopyright,
+} from "@tabler/icons-react";
+import IconButton from "./IconButton";
+import List from "./List";
 
 const productRoutes = ["Todos", "Novos", "Mais Vendidos", "Promoções"];
 const clientRoutes = [
@@ -22,9 +24,27 @@ function Footer() {
     <div className="mt-8 bg-neutral-200/30">
       <footer className="container mx-auto grid gap-8 px-6 py-4 md:px-0">
         <section className="grid grid-cols-2 gap-8 lg:grid-cols-4">
-          <FooterList title="Produtos" items={productRoutes} />
-          <FooterList title="Cliente" items={clientRoutes} />
-          <FooterList title="Empresa" items={companyRoutes} />
+          <List header="Produtos">
+            {productRoutes.map((route) => (
+              <li key={route}>
+                <Link to="/">{route}</Link>
+              </li>
+            ))}
+          </List>
+          <List header="Cliente">
+            {clientRoutes.map((route) => (
+              <li key={route}>
+                <Link to="/">{route}</Link>
+              </li>
+            ))}
+          </List>
+          <List header="Empresa">
+            {companyRoutes.map((route) => (
+              <li key={route}>
+                <Link to="/">{route}</Link>
+              </li>
+            ))}
+          </List>
           <form
             onSubmit={(event) => event.preventDefault()}
             className="flex flex-col gap-6"
@@ -41,7 +61,7 @@ function Footer() {
                 className="w-full border-b border-neutral-950 bg-transparent py-4"
               />
               <button type="submit">
-                <ChevronsRight />
+                <IconChevronsRight strokeWidth={1.5} />
               </button>
             </div>
           </form>
@@ -49,12 +69,18 @@ function Footer() {
         <hr className="border-neutral-200" />
         <section className="flex justify-between gap-4">
           <h4 className="flex items-center gap-1">
-            <Copyright size={20} strokeWidth={1.5} /> 2023 North Star
+            <IconCopyright strokeWidth={1.5} /> 2023 North Star
           </h4>
           <div className="flex items-center gap-2">
-            <Instagram aria-label="Instagram" size={20} strokeWidth={1.5} />
-            <Facebook aria-label="Facebook" size={20} strokeWidth={1.5} />
-            <Linkedin aria-label="LinkedIn" size={20} strokeWidth={1.5} />
+            <IconButton component={Link} to="/">
+              <IconBrandInstagram aria-label="Instagram" strokeWidth={1.5} />
+            </IconButton>
+            <IconButton component={Link} to="/">
+              <IconBrandFacebook aria-label="Facebook" strokeWidth={1.5} />
+            </IconButton>
+            <IconButton component={Link} to="/">
+              <IconBrandLinkedin aria-label="LinkedIn" strokeWidth={1.5} />
+            </IconButton>
           </div>
         </section>
       </footer>

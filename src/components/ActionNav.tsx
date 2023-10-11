@@ -1,6 +1,6 @@
-import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { IconMenu2, IconX } from "@tabler/icons-react";
 import Drawer from "./Drawer";
 import IconButton from "./IconButton";
 
@@ -19,7 +19,7 @@ function ActionNav({ routes }: Props) {
   }, [isOpen]);
 
   return (
-    <div className="flex">
+    <div className="flex md:hidden">
       <Drawer
         isOpen={isOpen}
         setIsOpen={setIsOpen}
@@ -34,7 +34,7 @@ function ActionNav({ routes }: Props) {
             title="Abrir menu"
             type="button"
           >
-            <Menu aria-hidden size={24} strokeWidth={1.5} />
+            <IconMenu2 aria-hidden strokeWidth={1.5} />
           </IconButton>
         }
       >
@@ -48,7 +48,7 @@ function ActionNav({ routes }: Props) {
               title="Fechar menu"
               type="button"
             >
-              <X aria-hidden size={24} strokeWidth={1.5} />
+              <IconX aria-hidden strokeWidth={1.5} />
             </IconButton>
           </div>
           <ul

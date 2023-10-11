@@ -7,15 +7,11 @@ import DrawerSort from "./DrawerSort";
 import MenuSort from "./MenuSort";
 import MenuFilter from "./MenuFilter";
 
-const sortOptions = [
-  { label: "Maior Preço", value: "maior-preço" },
-  { label: "Menor Preço", value: "menor-preço" },
-  { label: "Mais Novos", value: "novo" },
-  { label: "Mais Vendidos", value: "mais-vendidos" },
-  { label: "Melhor Avaliados", value: "melhor-avaliados" },
-];
+type Props = {
+  sortOptions: Array<{ label: string; value: string }>;
+};
 
-function ProductsHeader() {
+function ProductsHeader({ sortOptions }: Props) {
   const [categories, setCategories] = useState<TMainCategory[]>([]);
 
   async function getProductCategories() {

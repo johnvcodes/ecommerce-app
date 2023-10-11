@@ -1,5 +1,4 @@
-import { StarIcon as SolidStarIcon } from "@heroicons/react/24/solid";
-import { StarIcon } from "@heroicons/react/24/outline";
+import { IconStar, IconStarFilled } from "@tabler/icons-react";
 
 type Props = { rating: number };
 
@@ -11,14 +10,14 @@ function ProductRating({ rating }: Props) {
       {ratingArray.map((_, index) => (
         <span
           key={`rating-${Math.floor(Math.random() * 1000)}${Math.floor(
-            Math.random() * 1000
+            Math.random() * 1000,
           )}`}
           className="text-yellow-500"
         >
           {Math.floor(rating) > index ? (
-            <SolidStarIcon className="h-4 w-4" />
+            <IconStarFilled strokeWidth={1.5} />
           ) : (
-            <StarIcon className="h-4 w-4" />
+            <IconStar strokeWidth={1.5} />
           )}
         </span>
       ))}

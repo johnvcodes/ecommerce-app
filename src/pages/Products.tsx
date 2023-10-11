@@ -6,22 +6,30 @@ import {
   orderBy,
   startAfter,
 } from "firebase/firestore";
-import { useAppSelector } from "../store/store";
+import { ChevronRight } from "lucide-react";
 import { firestore } from "../firebase/config";
 import { getProducts } from "../firebase/firestore/products";
 import { TProduct } from "../@types/product";
-import { ChevronRight } from "lucide-react";
-import Spinner from "../components/Spinner";
-import ProductDisplay from "../components/ProductDisplay";
 import Button from "../components/Button";
+import ProductDisplay from "../components/ProductDisplay";
 import ProductsHeader from "../components/ProductsHeader";
+import Spinner from "../components/Spinner";
+
+type SortParam = "maior-preço" | "menor-preço" | "novo" | "melhor-avaliados";
+
+const sortOptions = [
+  { label: "Maior Preço", value: "maior-preço" },
+  { label: "Menor Preço", value: "menor-preço" },
+  { label: "Mais Novos", value: "novo" },
+  { label: "Melhor Avaliados", value: "melhor-avaliados" },
+];
 
 function Products() {
   const [params] = useSearchParams();
 
-  const sortOptions = params.get("sort");
+  const typeParam = params.getAll("tipo");
 
-  const { filter, subFilter } = useAppSelector((state) => state.filterReducer);
+  const sortParam = params.get("ordem") as SortParam;
 
   const [products, setProducts] = useState<TProduct[]>([]);
 
@@ -35,35 +43,37 @@ function Products() {
   const [loadingMoreProducts, setLoadingMoreProducts] =
     useState<boolean>(false);
 
-  function sortProducts(): TProduct[] {
-    if (sortOptions) {
-      if (sortOptions === "new") {
+  function sortProducts(products: TProduct[]) {
+    switch (sortParam) {
+      case "novo":
         return products.sort(
-          (productA, productB) =>
-            productB.createdAt.toDate().valueOf() -
-            productA.createdAt.toDate().valueOf(),
+          (a, b) =>
+            b.createdAt.toDate().valueOf() - a.createdAt.toDate().valueOf(),
         );
-      }
 
-      if (sortOptions === "rating") {
-        return products.sort(
-          (productA, productB) => productB.rating - productA.rating,
-        );
-      }
+      case "menor-preço":
+        return products.sort((a, b) => a.price - b.price);
+
+      case "maior-preço":
+        return products.sort((a, b) => b.price - a.price);
+
+      case "melhor-avaliados":
+        return products.sort((a, b) => b.rating - a.rating);
+
+      default:
+        return products.sort((a, b) => a.title.localeCompare(b.title));
     }
-
-    return products;
   }
 
-  const filteredProducts = sortProducts()
-    .filter((product) => {
-      if (!filter) return true;
-      return product.categories.some((category) => category.uid === filter);
-    })
-    .filter((product) => {
-      if (!subFilter) return true;
-      return product.subcategory.uid === subFilter;
-    });
+  function filterProducts(products: TProduct[]) {
+    if (!typeParam || typeParam.length === 0) return products;
+
+    const filtered = products.filter((product) =>
+      product.categories.some((category) => typeParam.includes(category.value)),
+    );
+
+    return filtered;
+  }
 
   const pageSize = 8;
 
@@ -75,6 +85,7 @@ function Products() {
       ]);
 
       setProducts(databaseProducts);
+
       setStartAfterDoc(lastDocument);
     } catch (error) {
       throw new Error(String(error));
@@ -85,6 +96,7 @@ function Products() {
 
   async function loadMoreProducts() {
     setLoadingMoreProducts(true);
+
     try {
       const { databaseProducts, lastDocument, isLastDocument } =
         await getProducts(firestore, [
@@ -94,11 +106,14 @@ function Products() {
         ]);
 
       setProducts((previous) => [...previous, ...databaseProducts]);
+
       setStartAfterDoc(lastDocument);
+
       setIsLastDoc(isLastDocument);
     } catch (error) {
       throw new Error(String(error));
     }
+
     setLoadingMoreProducts(false);
   }
 
@@ -110,8 +125,8 @@ function Products() {
 
   return !loading ? (
     <div className="flex flex-col items-center gap-4 py-4">
-      <ProductsHeader />
-      <ProductDisplay products={filteredProducts} />
+      <ProductsHeader sortOptions={sortOptions} />
+      <ProductDisplay products={filterProducts(sortProducts(products))} />
       {!isLastDoc && (
         <Button
           onClick={loadMoreProducts}

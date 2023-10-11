@@ -1,28 +1,35 @@
-import { Headphones, Tag, Truck, Undo2 } from "lucide-react";
-import FeatureCard from "./FeatureCard";
+import {
+  IconArrowBack,
+  IconHeadphones,
+  IconTag,
+  IconTruckDelivery,
+} from "@tabler/icons-react";
 import { TFeature } from "../@types/feature";
+import FeatureCard from "./FeatureCard";
 
 const features: TFeature[] = [
   {
-    icon: <Tag size={24} strokeWidth={2} className="shrink-0 text-primary" />,
+    icon: <IconTag strokeWidth={1.5} className="shrink-0 text-primary" />,
     title: "Preços Imbatíveis",
     description: "Roupas de ótima qualidade e preço somente aqui",
   },
   {
-    icon: <Truck size={24} strokeWidth={2} className="shrink-0 text-primary" />,
+    icon: (
+      <IconTruckDelivery strokeWidth={1.5} className="shrink-0 text-primary" />
+    ),
     title: "Frete Grátis",
     description: "Aproveite frete grátis para compras acima de R$100,00",
   },
   {
     icon: (
-      <Headphones size={24} strokeWidth={2} className="shrink-0 text-primary" />
+      <IconHeadphones strokeWidth={1.5} className="shrink-0 text-primary" />
     ),
     title: "Atendimento ao cliente",
     description:
       "Nosso serviço de atendimento ao cliente funciona o dia todo, todos os dias",
   },
   {
-    icon: <Undo2 size={24} strokeWidth={2} className="shrink-0 text-primary" />,
+    icon: <IconArrowBack strokeWidth={1.5} className="shrink-0 text-primary" />,
     title: "30 dias para devolução",
     description: "Período de 30 dias para devolver itens",
   },
