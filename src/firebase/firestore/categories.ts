@@ -6,8 +6,6 @@ import {
   collection,
   doc,
   getDocs,
-  orderBy,
-  query,
   setDoc,
 } from "firebase/firestore";
 import { TMainCategory } from "../../@types/categories";

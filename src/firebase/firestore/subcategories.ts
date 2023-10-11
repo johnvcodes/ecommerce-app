@@ -24,20 +24,21 @@ const subcategoryConverter: FirestoreDataConverter<TSubcategory> = {
 
 async function addSubcategory(
   firestore: Firestore,
-  subcategoryData: Omit<TSubcategory, "uid" | "createdAt">
+  subcategoryData: Omit<TSubcategory, "uid" | "createdAt">,
 ) {
   const uid = nanoid(20);
 
-  const { title } = subcategoryData;
+  const { label, value } = subcategoryData;
 
   try {
     await setDoc(
       doc(firestore, "subcategories", uid).withConverter(subcategoryConverter),
       {
         uid,
-        title,
+        label,
+        value,
         createdAt: Timestamp.now(),
-      }
+      },
     );
   } catch (error) {
     throw new Error(String(error));
@@ -48,11 +49,11 @@ async function getSubcategories(firestore: Firestore) {
   const dataCollection: TSubcategory[] = [];
   const collectionReference = query(
     collection(firestore, "subcategories"),
-    orderBy("title", "asc")
+    orderBy("title", "asc"),
   );
   try {
     const data = await getDocs(
-      collectionReference.withConverter(subcategoryConverter)
+      collectionReference.withConverter(subcategoryConverter),
     );
 
     data.forEach((item) => {

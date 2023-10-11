@@ -45,12 +45,12 @@ function AdminAllProducts() {
           <div>
             <h2>Categorias</h2>
             {product.categories.map((category) => (
-              <span key={category.uid}>{category.title}</span>
+              <span key={category.uid}>{category.label}</span>
             ))}
           </div>
           <div>
             <h2>Subcategoria</h2>
-            <span>{product.subcategory.title}</span>
+            <span>{product.subcategory.label}</span>
           </div>
           <div>
             <h2>Tamanhos</h2>

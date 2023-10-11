@@ -54,7 +54,7 @@ function Categories() {
               {categories.map((category) => (
                 <tr key={category.uid}>
                   <td className="border border-neutral-300 dark:border-neutral-700">
-                    {category.title}
+                    {category.label}
                   </td>
                   <td className="border border-neutral-300 dark:border-neutral-700">
                     {category.uid}
@@ -82,7 +82,7 @@ function Categories() {
               {subcategories.map((subcategory) => (
                 <tr key={subcategory.uid}>
                   <td className="border border-neutral-300 dark:border-neutral-700">
-                    {subcategory.title}
+                    {subcategory.label}
                   </td>
                   <td className="border border-neutral-300 dark:border-neutral-700">
                     {subcategory.uid}
