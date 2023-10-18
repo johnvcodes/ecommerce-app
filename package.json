@@ -1,7 +1,7 @@
 {
-  "name": "ecommerce-app",
+  "name": "react-firebase-north-star",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.4.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -15,6 +15,7 @@
     "@heroicons/react": "^2.0.17",
     "@reduxjs/toolkit": "^1.9.5",
     "@tabler/icons-react": "^2.38.0",
+    "clsx": "^2.0.0",
     "firebase": "^9.22.0",
     "lucide-react": "^0.279.0",
     "nanoid": "^4.0.2",
