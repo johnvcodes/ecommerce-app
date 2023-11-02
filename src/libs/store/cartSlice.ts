@@ -6,7 +6,7 @@ type CartState = {
   total: number;
 };
 
-const LOCAL_STORAGE_CART_SLICE_KEY = "cartState";
+const LOCAL_STORAGE_CART_SLICE_KEY = "ns.cart";
 
 function getCartState() {
   if (!localStorage.getItem(LOCAL_STORAGE_CART_SLICE_KEY)) {
