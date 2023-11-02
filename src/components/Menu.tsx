@@ -6,7 +6,7 @@ import {
   useRef,
 } from "react";
 import useClickAway from "../hooks/useClickAway";
-import clsx from "clsx";
+import classNames from "@/utilities/class-names";
 
 type Position =
   | "center"
@@ -45,8 +45,8 @@ function Menu({
       <div
         id={props["id"]}
         data-open={isOpen}
-        className={clsx(
-          "invisible absolute z-40 min-w-[7.5rem] translate-x-full border border-neutral-200 bg-neutral-50 opacity-0 transition-all duration-300 data-[open='true']:visible data-[open='true']:translate-x-0 data-[open='true']:opacity-100",
+        className={classNames(
+          "invisible absolute z-40 min-w-[7.5rem] border border-neutral-200 bg-neutral-50 opacity-0 transition-all duration-300 data-[open='true']:visible data-[open='true']:opacity-100",
           {
             "bottom-full": position === "top",
             "bottom-full left-0": position === "top-left",
