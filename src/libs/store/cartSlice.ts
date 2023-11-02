@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { TCartProduct } from "../@types/product";
+import { TCartProduct } from "@/@types/product";
 
 type CartState = {
   cart: TCartProduct[];
@@ -13,7 +13,7 @@ function getCartState() {
     return { cart: [], total: 0 };
   }
   const cartState = JSON.parse(
-    localStorage.getItem(LOCAL_STORAGE_CART_SLICE_KEY) || ""
+    localStorage.getItem(LOCAL_STORAGE_CART_SLICE_KEY) || "",
   ) as CartState;
   return cartState;
 }
@@ -21,7 +21,7 @@ function getCartState() {
 function calculateTotal(cart: TCartProduct[]) {
   return cart.reduce(
     (accumulator, product) => accumulator + product.price * product.quantity,
-    0
+    0,
   );
 }
 
@@ -39,7 +39,7 @@ const cartSlice = createSlice({
       const draft = state;
 
       const isProductInCart = draft.cart.findIndex(
-        (product) => product.uid === action.payload.uid
+        (product) => product.uid === action.payload.uid,
       );
 
       if (isProductInCart >= 0) {
@@ -54,7 +54,7 @@ const cartSlice = createSlice({
     increaseQuantity(state, action: PayloadAction<string>) {
       const draft = state;
       const productIndex = draft.cart.findIndex(
-        (product) => product.uid === action.payload
+        (product) => product.uid === action.payload,
       );
       draft.cart[productIndex].quantity += 1;
       draft.total = calculateTotal(draft.cart);
@@ -65,7 +65,7 @@ const cartSlice = createSlice({
     decreaseQuantity(state, action: PayloadAction<string>) {
       const draft = state;
       const productIndex = draft.cart.findIndex(
-        (product) => product.uid === action.payload
+        (product) => product.uid === action.payload,
       );
       if (draft.cart[productIndex].quantity === 1) {
         draft.cart.splice(productIndex, 1);
@@ -79,7 +79,7 @@ const cartSlice = createSlice({
     removeFromCart(state, action) {
       const draft = state;
       const productIndex = draft.cart.findIndex(
-        (product) => product.uid === action.payload
+        (product) => product.uid === action.payload,
       );
       draft.cart.splice(productIndex, 1);
       draft.total = calculateTotal(draft.cart);
