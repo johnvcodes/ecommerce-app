@@ -1,17 +1,19 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { TUserCredentials } from "../@types/user";
-import { auth } from "../firebase/config";
-import getAuthError from "../firebase/authentication/errors";
+import { TUserCredential } from "../@types/user";
+
 import Button from "../components/Button";
 import Spinner from "../components/Spinner";
 import TextInput from "../components/TextInput";
 
-type LoginState = Omit<TUserCredentials, "displayName">;
+import Container from "../components/Container";
+import loginUser from "../libs/firebase/authentication/login-user";
+import getAuthError from "../libs/firebase/authentication/errors";
 
-function Login() {
+type TAccountLogin = Omit<TUserCredential, "displayName">;
+
+function AccountLogin() {
   const [authError, setAuthError] = useState<string>("");
   const [authLoading, setAuthLoading] = useState<boolean>(false);
 
@@ -22,18 +24,18 @@ function Login() {
     reset,
     formState: { errors },
     handleSubmit,
-  } = useForm<LoginState>({
+  } = useForm<TAccountLogin>({
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  const onSubmit: SubmitHandler<LoginState> = async (data) => {
+  const onSubmit: SubmitHandler<TAccountLogin> = async (data) => {
     const { email, password } = data;
     setAuthLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await loginUser(email, password);
       navigate("/");
     } catch (error) {
       setAuthError(getAuthError(error));
@@ -43,11 +45,11 @@ function Login() {
   };
 
   return (
-    <div className="container mx-auto flex h-[calc(100vh_-_3.5rem)]">
+    <Container className="container mx-auto flex h-[calc(100vh_-_3.5rem)]">
       <form
         onSubmit={handleSubmit(onSubmit)}
         autoComplete="off"
-        className="m-auto flex min-w-[20rem] flex-col gap-6 bg-neutral-50 p-4 shadow-sm"
+        className="m-auto flex min-w-[20rem] flex-col gap-4"
       >
         <h2 className="text-center font-extrabold uppercase text-primary">
           Entrar
@@ -82,8 +84,11 @@ function Login() {
         />
         <Button
           type="submit"
-          disabled={authLoading}
           aria-disabled={authLoading}
+          disabled={authLoading}
+          size="small"
+          variant="tertiary"
+          className="w-fit self-center"
         >
           {authLoading ? <Spinner /> : "Confirmar"}
         </Button>
@@ -97,8 +102,8 @@ function Login() {
           </Link>
         </span>
       </form>
-    </div>
+    </Container>
   );
 }
 
-export default Login;
+export default AccountLogin;

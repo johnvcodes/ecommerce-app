@@ -1,7 +1,7 @@
-import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
 import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../store/store";
-import { toggleTheme } from "../store/themeSlice";
+import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
+import { useAppDispatch, useAppSelector } from "@libs/store/store";
+import { toggleTheme } from "@libs/store/themeSlice";
 
 function ThemeButton() {
   const theme = useAppSelector((state) => state.themeReducer.darkMode);

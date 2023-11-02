@@ -1,5 +1,6 @@
-import { ChevronDown, ChevronUp } from "lucide-react";
 import { ReactNode, useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import Button from "@components/Button";
 
 type Props = {
   title: string;
@@ -10,8 +11,8 @@ function Accordion({ title, children }: Props) {
   const [openAccordion, setOpenAccordion] = useState(false);
 
   return (
-    <div>
-      <button
+    <div className="w-full">
+      <Button
         onClick={() => setOpenAccordion(!openAccordion)}
         aria-controls={title.split(" ").join("-").toLowerCase()}
         aria-label={
@@ -19,7 +20,9 @@ function Accordion({ title, children }: Props) {
         }
         aria-haspopup="true"
         aria-expanded={openAccordion}
-        className="flex w-full items-center justify-between gap-4 border-b border-neutral-300 py-2"
+        variant="secondary"
+        size="small"
+        className="w-full"
       >
         {title}
         {openAccordion ? (
@@ -27,12 +30,13 @@ function Accordion({ title, children }: Props) {
         ) : (
           <ChevronDown size={20} strokeWidth={1.5} />
         )}
-      </button>
+      </Button>
+
       <div
         id={title.split(" ").join("-").toLowerCase()}
         data-open={openAccordion}
         aria-hidden={!openAccordion}
-        className="invisible max-h-0 overflow-hidden pt-2 data-[open='true']:visible data-[open='true']:max-h-screen"
+        className="hidden max-h-0 overflow-hidden py-2 transition-all duration-200 data-[open='true']:block data-[open='true']:max-h-screen"
       >
         {children}
       </div>

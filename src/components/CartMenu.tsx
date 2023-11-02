@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { ShoppingBagIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
-
-import CartProduct from "./CartItems";
-import { useAppSelector } from "../store/store";
+import { ShoppingBagIcon } from "@heroicons/react/24/outline";
+import { useAppSelector } from "@libs/store/store";
+import CartProduct from "@/components/CartMenuItem";
 
 function CartMenu() {
   const cart = useAppSelector((state) => state.cartReducer.cart);

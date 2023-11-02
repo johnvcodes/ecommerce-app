@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import Divider from "./Divider";
+import Divider from "@components/Divider";
 
 const routes = [
   {

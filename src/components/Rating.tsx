@@ -12,12 +12,12 @@ function ProductRating({ rating }: Props) {
           key={`rating-${Math.floor(Math.random() * 1000)}${Math.floor(
             Math.random() * 1000,
           )}`}
-          className="text-yellow-500"
+          className="text-secondary"
         >
           {Math.floor(rating) > index ? (
-            <IconStarFilled strokeWidth={1.5} />
+            <IconStarFilled size={16} strokeWidth={1.5} />
           ) : (
-            <IconStar strokeWidth={1.5} />
+            <IconStar size={16} strokeWidth={1.5} />
           )}
         </span>
       ))}

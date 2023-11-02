@@ -1,19 +1,17 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { auth, firestore } from "../firebase/config";
-import { TUserCredentials } from "../@types/user";
-import createUser from "../firebase/authentication/create-user";
-import getAuthError from "../firebase/authentication/errors";
+import { TUserCredential } from "../@types/user";
+import createUser from "../libs/firebase/authentication/create-user";
+import getAuthError from "../libs/firebase/authentication/errors";
 import Button from "../components/Button";
 import Spinner from "../components/Spinner";
 import TextInput from "../components/TextInput";
+import Container from "../components/Container";
 
-type RegisterValues = TUserCredentials & {
-  confirmPassword: string;
-};
+type TAccountCreate = TUserCredential & { confirmPassword: string };
 
-function Register() {
+function AccountCreate() {
   const [authError, setAuthError] = useState<string>("");
   const [authLoading, setAuthLoading] = useState<boolean>(false);
 
@@ -21,11 +19,10 @@ function Register() {
 
   const {
     register,
-
     reset,
     formState: { errors },
     handleSubmit,
-  } = useForm<RegisterValues>({
+  } = useForm<TAccountCreate>({
     defaultValues: {
       displayName: "",
       email: "",
@@ -34,10 +31,10 @@ function Register() {
     },
   });
 
-  const onSubmit: SubmitHandler<RegisterValues> = async (data) => {
+  const onSubmit: SubmitHandler<TAccountCreate> = async (data) => {
     setAuthLoading(true);
     try {
-      await createUser(auth, firestore, data);
+      await createUser(data);
       navigate("/");
     } catch (error) {
       setAuthError(getAuthError(error));
@@ -47,13 +44,12 @@ function Register() {
   };
 
   return (
-    <div className="container mx-auto flex h-[calc(100vh_-_3.5rem)]">
+    <Container className="flex min-h-[calc(100vh_-_3.5rem)] items-center justify-center gap-4">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        autoComplete="off"
-        className="m-auto flex min-w-[20rem] flex-col gap-6 bg-neutral-50 p-4 shadow-sm"
+        className="flex min-w-[20rem] flex-col gap-4"
       >
-        <h2 className="text-center font-extrabold uppercase text-primary">
+        <h2 className="text-center font-heading font-black uppercase text-primary">
           Crie sua conta
         </h2>
         {authError && (
@@ -135,8 +131,11 @@ function Register() {
         />
         <Button
           type="submit"
-          disabled={authLoading}
           aria-disabled={authLoading}
+          disabled={authLoading}
+          size="small"
+          variant="tertiary"
+          className="w-fit self-center"
         >
           {authLoading ? <Spinner /> : "Confirmar"}
         </Button>
@@ -150,8 +149,8 @@ function Register() {
           </Link>
         </span>
       </form>
-    </div>
+    </Container>
   );
 }
 
-export default Register;
+export default AccountCreate;

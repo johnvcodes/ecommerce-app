@@ -1,6 +1,6 @@
 import { Timestamp } from "firebase/firestore";
 
-export type TMainCategory = {
+export type TCategory = {
   uid: string;
   label: string;
   value: string;
@@ -15,6 +15,6 @@ export type TSubcategory = {
 };
 
 export type TCategories = {
-  mainCategories: TMainCategory[];
+  mainCategories: TCategory[];
   subcategories: TSubcategory[];
 };

@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { User } from "lucide-react";
 import { signOut } from "firebase/auth";
-import { IconUser } from "@tabler/icons-react";
-import { auth } from "../firebase/config";
+import { auth } from "@libs/firebase/config";
 import { useAuth } from "../contexts/AuthContext";
 import getErrorMessage from "../utilities/get-error-message";
-import Button from "./Button";
-import IconButton from "./IconButton";
-import Menu from "./Menu";
+import Button from "@components/Button";
+import IconButton from "@components/IconButton";
+import Menu from "@components/Menu";
 
 function ActionUser() {
   const navigate = useNavigate();
@@ -42,11 +42,11 @@ function ActionUser() {
           title="Menu de usuário"
           type="button"
         >
-          <IconUser aria-hidden strokeWidth={1.5} />
+          <User aria-hidden strokeWidth={1.5} />
         </IconButton>
       }
     >
-      <div className="grid">
+      <div className="grid w-40 p-2">
         {!userData ? (
           <>
             <Button

@@ -8,7 +8,7 @@ export type TUser = {
   createdAt: Timestamp;
 };
 
-export type TUserCredentials = {
+export type TUserCredential = {
   displayName: string;
   email: string;
   password: string;

@@ -9,31 +9,31 @@ import { DevTool } from "@hookform/devtools";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import Select from "react-select";
 import { nanoid } from "nanoid";
-import { TMainCategory, TSubcategory } from "../../@types/categories";
+import { TCategory, TSubcategory } from "../../@types/categories";
 import { TSize } from "../../@types/size";
-import { getSizes } from "../../firebase/firestore/sizes";
-import { firestore, storage } from "../../firebase/config";
-import { addProduct } from "../../firebase/firestore/products";
-import { getCategories } from "../../firebase/firestore/categories";
 import TextInput from "../../components/TextInput";
 import Textarea from "../../components/Textarea";
 import Button from "../../components/Button";
 import Spinner from "../../components/Spinner";
 import getErrorMessage from "../../utilities/get-error-message";
-import { getSubcategories } from "../../firebase/firestore/subcategories";
+import { getCategories } from "../../libs/firebase/firestore/categories";
+import { getSubcategories } from "../../libs/firebase/firestore/subcategories";
+import { getSizes } from "../../libs/firebase/firestore/sizes";
+import { storage } from "../../libs/firebase/config";
+import { addProduct } from "../../libs/firebase/firestore/products";
 
-type AddProductValues = {
+type TAddProduct = {
   title: string;
   price: number;
   stock: number;
-  categories: TMainCategory[];
+  categories: TCategory[];
   subcategory: TSubcategory;
   sizes: TSize[];
   description: string;
   images: FileList | null;
 };
 
-const defaultValues: DefaultValues<AddProductValues> = {
+const defaultValues: DefaultValues<TAddProduct> = {
   title: "",
   description: "",
   price: 0,
@@ -51,11 +51,11 @@ function AdminAddProduct() {
     control,
     formState: { errors },
     handleSubmit,
-  } = useForm<AddProductValues>({
+  } = useForm<TAddProduct>({
     defaultValues,
   });
 
-  const [categories, setCategories] = useState<TMainCategory[]>([]);
+  const [categories, setCategories] = useState<TCategory[]>([]);
   const [subcategories, setSubcategories] = useState<TSubcategory[]>([]);
   const [sizes, setSizes] = useState<TSize[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -63,11 +63,7 @@ function AdminAddProduct() {
   async function getProductOptions() {
     try {
       const [databaseCategories, databaseSubcategories, databaseSizes] =
-        await Promise.all([
-          getCategories(firestore),
-          getSubcategories(firestore),
-          getSizes(firestore),
-        ]);
+        await Promise.all([getCategories(), getSubcategories(), getSizes()]);
       setCategories(databaseCategories);
       setSubcategories(databaseSubcategories);
       setSizes(databaseSizes);
@@ -76,7 +72,7 @@ function AdminAddProduct() {
     }
   }
 
-  const onSubmit: SubmitHandler<AddProductValues> = async (data) => {
+  const onSubmit: SubmitHandler<TAddProduct> = async (data) => {
     const uid = nanoid(21);
     setLoading(true);
     try {
@@ -89,7 +85,7 @@ function AdminAddProduct() {
       const downloadURLS = await Promise.all(
         uploadURLS.map((url) => getDownloadURL(url.ref)),
       );
-      await addProduct(firestore, { ...data, images: downloadURLS });
+      await addProduct({ ...data, images: downloadURLS });
     } catch (error) {
       getErrorMessage(error);
     }

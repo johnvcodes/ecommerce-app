@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { IconMenu2, IconX } from "@tabler/icons-react";
-import Drawer from "./Drawer";
-import IconButton from "./IconButton";
+import Drawer from "@components/Drawer";
+import IconButton from "@components/IconButton";
 
 type Props = {
   routes: { path: string; label: string }[];

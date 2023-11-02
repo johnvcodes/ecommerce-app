@@ -6,8 +6,8 @@ import {
   IconChevronsRight,
   IconCopyright,
 } from "@tabler/icons-react";
-import IconButton from "./IconButton";
-import List from "./List";
+import IconButton from "@components/IconButton";
+import List from "@components/List";
 
 const productRoutes = ["Todos", "Novos", "Mais Vendidos", "Promoções"];
 const clientRoutes = [
@@ -21,8 +21,8 @@ const companyRoutes = ["Sobre Nós", "Trabalhe Conosco", "Fale Conosco"];
 
 function Footer() {
   return (
-    <div className="mt-8 bg-neutral-200/30">
-      <footer className="container mx-auto grid gap-8 px-6 py-4 md:px-0">
+    <div className="bg-neutral-200/30 pt-6">
+      <footer className="container mx-auto grid gap-8 px-6 pb-4 md:px-0">
         <section className="grid grid-cols-2 gap-8 lg:grid-cols-4">
           <List header="Produtos">
             {productRoutes.map((route) => (

@@ -9,7 +9,7 @@ const contextClass = {
   info: "bg-blue-500",
   warning: "bg-orange-500",
   default: "bg-indigo-500",
-  dark: "bg-white-600 font-gray-300",
+  dark: "bg-neutral-50-600 font-gray-300",
 };
 
 function App() {

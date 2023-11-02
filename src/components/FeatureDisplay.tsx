@@ -5,7 +5,7 @@ import {
   IconTruckDelivery,
 } from "@tabler/icons-react";
 import { TFeature } from "../@types/feature";
-import FeatureCard from "./FeatureCard";
+import FeatureCard from "@components/FeatureCard";
 
 const features: TFeature[] = [
   {
@@ -37,7 +37,7 @@ const features: TFeature[] = [
 
 function FeatureDisplay() {
   return (
-    <div className="bg-neutral-50 py-4">
+    <div className="py-4">
       <section className="container mx-auto grid auto-rows-fr gap-4 px-6 py-4 sm:grid-cols-2 md:px-0 lg:grid-cols-4">
         {features.map((feature) => (
           <FeatureCard key={feature.title} feature={feature} />

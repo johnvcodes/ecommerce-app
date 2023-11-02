@@ -1,5 +1,4 @@
 import {
-  Firestore,
   FirestoreDataConverter,
   Timestamp,
   collection,
@@ -10,7 +9,9 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { nanoid } from "nanoid";
-import { TSubcategory } from "../../@types/categories";
+
+import { firestore } from "../config";
+import { TSubcategory } from "@/@types/categories";
 
 const subcategoryConverter: FirestoreDataConverter<TSubcategory> = {
   toFirestore(subcategory) {
@@ -23,7 +24,6 @@ const subcategoryConverter: FirestoreDataConverter<TSubcategory> = {
 };
 
 async function addSubcategory(
-  firestore: Firestore,
   subcategoryData: Omit<TSubcategory, "uid" | "createdAt">,
 ) {
   const uid = nanoid(20);
@@ -45,11 +45,11 @@ async function addSubcategory(
   }
 }
 
-async function getSubcategories(firestore: Firestore) {
+async function getSubcategories() {
   const dataCollection: TSubcategory[] = [];
   const collectionReference = query(
     collection(firestore, "subcategories"),
-    orderBy("title", "asc"),
+    orderBy("value", "asc"),
   );
   try {
     const data = await getDocs(

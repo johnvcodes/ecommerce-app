@@ -8,8 +8,8 @@ type Props = {
 function ProductCard({ product }: Props) {
   return (
     <Link to={`/produtos/${product.uid}`} className="flex flex-col gap-2">
-      <img src={product.images[0]} alt="" />
-      <h3 className="text-center font-extrabold">{product.title}</h3>
+      <img src={product.images[0]} alt="" className="" />
+      <h3 className="text-center  font-extrabold">{product.title}</h3>
       <p className="text-center text-primary">
         {Intl.NumberFormat("pt-BR", {
           currency: "BRL",

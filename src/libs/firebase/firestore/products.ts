@@ -1,5 +1,4 @@
 import {
-  Firestore,
   FirestoreDataConverter,
   QueryDocumentSnapshot,
   QueryNonFilterConstraint,
@@ -12,7 +11,8 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { nanoid } from "nanoid";
-import { TProduct } from "../../@types/product";
+import { TProduct } from "@/@types/product";
+import { firestore } from "../config";
 
 const productConverter: FirestoreDataConverter<TProduct> = {
   toFirestore(product) {
@@ -29,7 +29,6 @@ function getRandomRating(max: number, min: number) {
 }
 
 async function addProduct(
-  firestore: Firestore,
   productData: Omit<TProduct, "uid" | "rating" | "createdAt">,
 ) {
   const uid = nanoid(20);
@@ -49,7 +48,7 @@ async function addProduct(
   }
 }
 
-async function getProduct(firestore: Firestore, productUID: string) {
+async function getProduct(productUID: string) {
   try {
     const data = await getDoc(
       doc(firestore, "products", productUID).withConverter(productConverter),
@@ -63,10 +62,7 @@ async function getProduct(firestore: Firestore, productUID: string) {
   }
 }
 
-async function getProducts(
-  firestore: Firestore,
-  constraints: QueryNonFilterConstraint[] = [],
-) {
+async function getProducts(constraints: QueryNonFilterConstraint[] = []) {
   const databaseProducts: TProduct[] = [];
 
   let lastDocument: QueryDocumentSnapshot<TProduct>;

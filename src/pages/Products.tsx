@@ -7,13 +7,14 @@ import {
   startAfter,
 } from "firebase/firestore";
 import { ChevronRight } from "lucide-react";
-import { firestore } from "../firebase/config";
-import { getProducts } from "../firebase/firestore/products";
+
 import { TProduct } from "../@types/product";
 import Button from "../components/Button";
 import ProductDisplay from "../components/ProductDisplay";
-import ProductsHeader from "../components/ProductsHeader";
+import ProductsOptions from "../components/ProductsOptions";
 import Spinner from "../components/Spinner";
+import { getProducts } from "../libs/firebase/firestore/products";
+import Container from "@/components/Container";
 
 type SortParam = "maior-preço" | "menor-preço" | "novo" | "melhor-avaliados";
 
@@ -26,8 +27,6 @@ const sortOptions = [
 
 function Products() {
   const [params] = useSearchParams();
-
-  const typeParam = params.getAll("tipo");
 
   const sortParam = params.get("ordem") as SortParam;
 
@@ -66,20 +65,32 @@ function Products() {
   }
 
   function filterProducts(products: TProduct[]) {
-    if (!typeParam || typeParam.length === 0) return products;
+    const categoryParam = params.getAll("categoria");
 
-    const filtered = products.filter((product) =>
-      product.categories.some((category) => typeParam.includes(category.value)),
-    );
+    const subcategoryParam = params.getAll("subcategoria");
+
+    const filtered = products
+      .filter((product) => {
+        if (!categoryParam || categoryParam.length === 0) return products;
+        return product.categories.some((category) =>
+          categoryParam.includes(category.value),
+        );
+      })
+      .filter((product) => {
+        if (!subcategoryParam || subcategoryParam.length === 0) return true;
+        return subcategoryParam.includes(product.subcategory.value);
+      });
 
     return filtered;
   }
+
+  const finalProducts = filterProducts(sortProducts(products));
 
   const pageSize = 8;
 
   async function getAllProducts() {
     try {
-      const { databaseProducts, lastDocument } = await getProducts(firestore, [
+      const { databaseProducts, lastDocument } = await getProducts([
         orderBy("title", "asc"),
         limit(pageSize),
       ]);
@@ -99,7 +110,7 @@ function Products() {
 
     try {
       const { databaseProducts, lastDocument, isLastDocument } =
-        await getProducts(firestore, [
+        await getProducts([
           orderBy("title", "asc"),
           limit(pageSize),
           startAfter(startAfterDoc),
@@ -124,20 +135,26 @@ function Products() {
   }, []);
 
   return !loading ? (
-    <div className="flex flex-col items-center gap-4 py-4">
-      <ProductsHeader sortOptions={sortOptions} />
-      <ProductDisplay products={filterProducts(sortProducts(products))} />
-      {!isLastDoc && (
-        <Button
-          onClick={loadMoreProducts}
-          type="button"
-          size="small"
-          endIcon={<ChevronRight size={20} strokeWidth={1.5} />}
-        >
-          {loadingMoreProducts ? <Spinner /> : "Carregar mais produtos"}
-        </Button>
-      )}
-    </div>
+    <Container className="flex min-h-[calc(100vh_-_3.5rem)] flex-col gap-4 py-8 md:flex-row">
+      <ProductsOptions sortOptions={sortOptions} />
+      <div className="flex flex-col items-center gap-4">
+        {!finalProducts || finalProducts.length === 0 ? (
+          <p>Nenhum produto encontrado</p>
+        ) : (
+          <ProductDisplay products={finalProducts} />
+        )}
+        {!isLastDoc && (
+          <Button
+            onClick={loadMoreProducts}
+            type="button"
+            size="small"
+            endIcon={<ChevronRight size={20} strokeWidth={1.5} />}
+          >
+            {loadingMoreProducts ? <Spinner /> : "Carregar mais produtos"}
+          </Button>
+        )}
+      </div>
+    </Container>
   ) : (
     <p>Carregando</p>
   );

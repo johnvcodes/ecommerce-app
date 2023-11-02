@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { firestore } from "../../firebase/config";
-import { getProducts } from "../../firebase/firestore/products";
+
 import { TProduct } from "../../@types/product";
+import { getProducts } from "../../libs/firebase/firestore/products";
 
 function AdminAllProducts() {
   const [products, setProducts] = useState<TProduct[]>([]);
 
   async function getAllProducts() {
-    const { databaseProducts } = await getProducts(firestore);
+    const { databaseProducts } = await getProducts();
     setProducts(databaseProducts);
   }
 

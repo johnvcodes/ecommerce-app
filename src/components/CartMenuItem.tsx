@@ -1,19 +1,19 @@
 import { toast } from "react-toastify";
 import { MinusIcon, PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { TCartProduct } from "../@types/product";
-import { useAppDispatch } from "../store/store";
+import { useAppDispatch } from "@libs/store/store";
 import {
   decreaseQuantity,
   increaseQuantity,
   removeFromCart,
-} from "../store/cartSlice";
-import Divider from "./Divider";
+} from "@libs/store/cartSlice";
+import Divider from "@components/Divider";
 
 type Props = {
   product: TCartProduct;
 };
 
-function CartItems({ product }: Props) {
+function CartMenuItem({ product }: Props) {
   const dispatch = useAppDispatch();
 
   const handleIncreaseQuantity = (productId: string) => {
@@ -29,9 +29,9 @@ function CartItems({ product }: Props) {
   };
 
   return (
-    <div className="flex overflow-hidden rounded border border-neutral-300 text-sm dark:border-neutral-700">
+    <div className="flex gap-2 overflow-hidden text-sm">
       <img src={product.images[0]} alt="" className="h-40" />
-      <div className="flex grow flex-col gap-2 p-2">
+      <div className="flex grow flex-col gap-2">
         <div className="flex items-center justify-between">
           <h2 className="font-bold uppercase">{product.title}</h2>
           <button
@@ -81,4 +81,4 @@ function CartItems({ product }: Props) {
   );
 }
 
-export default CartItems;
+export default CartMenuItem;

@@ -1,49 +1,21 @@
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Settings2, X } from "lucide-react";
-import { TMainCategory } from "../@types/categories";
-import Accordion from "./Accordion";
-import Button from "./Button";
-import Checkbox from "./Checkbox";
-import Drawer from "./Drawer";
+import { TCategory } from "../@types/categories";
+import Accordion from "@components/Accordion";
+import Button from "@components/Button";
+import Drawer from "@components/Drawer";
+import Checkbox from "@components/Checkbox";
 
 type Props = {
-  categories: TMainCategory[];
+  categories: TCategory[];
+  handleChangeCategory: (event: ChangeEvent<HTMLInputElement>) => void;
 };
 
-function DrawerFilter({ categories }: Props) {
+function DrawerFilter({ categories, handleChangeCategory }: Props) {
   const [showFilter, setShowFilter] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const filterRef = useRef<HTMLDivElement>(null);
 
-  function handleClickOut(event: MouseEvent) {
-    if (
-      filterRef.current &&
-      !filterRef.current.contains(event.target as Node)
-    ) {
-      setShowFilter(false);
-    }
-  }
-
-  function handleChangeFilter(event: ChangeEvent<HTMLInputElement>) {
-    const typeParams = searchParams.getAll("tipo");
-    if (typeParams.includes(event.target.value)) {
-      setSearchParams({
-        tipo: typeParams.filter((type) => type !== event.target.value),
-      });
-    } else {
-      searchParams.append("tipo", event.target.value);
-      setSearchParams(searchParams);
-    }
-  }
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOut);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOut);
-    };
-  });
+  const [searchParams] = useSearchParams();
 
   return (
     <Drawer
@@ -67,7 +39,7 @@ function DrawerFilter({ categories }: Props) {
         </Button>
       }
     >
-      <div className="flex flex-col gap-4 p-4">
+      <div className="flex flex-col items-start gap-4 p-4">
         <Button
           onClick={() => setShowFilter(!showFilter)}
           size="small"
@@ -79,13 +51,15 @@ function DrawerFilter({ categories }: Props) {
           <div className="grid gap-1">
             {categories.map((category) => (
               <Checkbox
-                onChange={handleChangeFilter}
+                onChange={handleChangeCategory}
                 key={category.uid}
-                id={category.value}
+                id={`mobile-${category.value}`}
                 name={category.value}
                 value={category.value}
                 label={category.label}
-                checked={searchParams.getAll("tipo").includes(category.value)}
+                checked={searchParams
+                  .getAll("categoria")
+                  .includes(category.value)}
               />
             ))}
           </div>

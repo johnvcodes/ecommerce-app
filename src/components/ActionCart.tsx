@@ -1,37 +1,42 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { IconShoppingBag } from "@tabler/icons-react";
-import { useAppSelector } from "../store/store";
-import CartPageItem from "./CartPageItem";
-import IconButton from "./IconButton";
-import Menu from "./Menu";
+import { ShoppingBag } from "lucide-react";
+import { useAppSelector } from "@libs/store/store";
+import IconButton from "@components/IconButton";
+import Menu from "@components/Menu";
+import CartMenuItem from "@components/CartMenuItem";
 
 function ActionCart() {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const { cart } = useAppSelector((state) => state.cartReducer);
 
   return (
     <>
       <div className="lg:hidden">
-        <IconButton component={Link} to="/sacola">
-          <IconShoppingBag strokeWidth={1.5} />
+        <IconButton component={Link} to="/sacola" counter={cart.length}>
+          <ShoppingBag strokeWidth={1.5} />
         </IconButton>
       </div>
       <div className="hidden lg:block">
         <Menu
           isOpen={isOpen}
           setIsOpen={setIsOpen}
-          position="right"
+          position="bottom-right"
+          id="cart-menu"
           handler={
-            <IconButton onClick={() => setIsOpen(!isOpen)} type="button">
-              <IconShoppingBag strokeWidth={1.5} />
+            <IconButton
+              onClick={() => setIsOpen(!isOpen)}
+              type="button"
+              counter={cart.length}
+            >
+              <ShoppingBag strokeWidth={1.5} />
             </IconButton>
           }
         >
-          <div className="grid w-[25rem] divide-y divide-neutral-300">
+          <div className="grid max-h-[365px] w-[25rem] gap-4 overflow-y-auto p-4">
             {cart.length > 0 ? (
               cart.map((product) => (
-                <CartPageItem key={product.uid} product={product} />
+                <CartMenuItem key={product.uid} product={product} />
               ))
             ) : (
               <h2 className="p-2">O carrinho está vazio</h2>

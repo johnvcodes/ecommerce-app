@@ -1,4 +1,4 @@
-import { useAppSelector } from "../store/store";
+import { useAppSelector } from "../libs/store/store";
 import CartPageItem from "../components/CartPageItem";
 import Button from "../components/Button";
 

@@ -1,5 +1,4 @@
 import {
-  Firestore,
   FirestoreDataConverter,
   Timestamp,
   collection,
@@ -10,8 +9,8 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { nanoid } from "nanoid";
-
-import { TSize } from "../../@types/size";
+import { TSize } from "../../../@types/size";
+import { firestore } from "../config";
 
 const sizeConverter: FirestoreDataConverter<TSize> = {
   toFirestore(size) {
@@ -23,10 +22,7 @@ const sizeConverter: FirestoreDataConverter<TSize> = {
   },
 };
 
-async function addSize(
-  firestore: Firestore,
-  sizeData: Omit<TSize, "uid" | "createdAt">
-) {
+async function addSize(sizeData: Omit<TSize, "uid" | "createdAt">) {
   const uid = nanoid(20);
 
   const { type, value, label } = sizeData;
@@ -44,15 +40,15 @@ async function addSize(
   }
 }
 
-async function getSizes(firestore: Firestore) {
+async function getSizes() {
   const dataCollection: TSize[] = [];
   const collectionReference = query(
     collection(firestore, "sizes"),
-    orderBy("label", "asc")
+    orderBy("label", "asc"),
   );
   try {
     const data = await getDocs(
-      collectionReference.withConverter(sizeConverter)
+      collectionReference.withConverter(sizeConverter),
     );
 
     data.forEach((item) => {

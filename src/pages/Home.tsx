@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { limit, orderBy } from "firebase/firestore";
-import { firestore } from "../firebase/config";
-import { getProducts } from "../firebase/firestore/products";
+
 import { TProduct } from "../@types/product";
 import getErrorMessage from "../utilities/get-error-message";
 import Hero from "../components/Hero";
 import ProductDisplay from "../components/ProductDisplay";
 import FeatureDisplay from "../components/FeatureDisplay";
+import { getProducts } from "../libs/firebase/firestore/products";
+import Container from "@/components/Container";
 
 function Home() {
   const [products, setProducts] = useState<{
@@ -20,8 +21,8 @@ function Home() {
         { databaseProducts: newestProducts },
         { databaseProducts: highestRatedProducts },
       ] = await Promise.all([
-        getProducts(firestore, [orderBy("createdAt", "desc"), limit(4)]),
-        getProducts(firestore, [orderBy("rating", "desc"), limit(4)]),
+        getProducts([orderBy("createdAt", "desc"), limit(4)]),
+        getProducts([orderBy("rating", "desc"), limit(4)]),
       ]);
       setProducts({ newestProducts, highestRatedProducts });
     } catch (error) {
@@ -35,18 +36,31 @@ function Home() {
 
   return (
     <div className="grid gap-8">
-      <Hero />
-      <ProductDisplay
-        title="Mais novos"
-        description="Veja nossos produtos mais novos"
-        products={products.newestProducts}
+      <Hero
+        content="Stylist picks beat the heat"
+        route={{ path: "/produtos", label: "Ver Mais" }}
       />
-      <FeatureDisplay />
-      <ProductDisplay
-        title="Mais vendidos"
-        description="Os produtos mais vendidos da loja"
-        products={products.highestRatedProducts}
-      />
+      <Container className="grid gap-8 py-8">
+        <section className="grid gap-12">
+          <h2 className="text-center font-heading text-[2rem] font-bold uppercase">
+            Novos Produtos
+          </h2>
+          <p className="text-center font-heading text-xl text-neutral-500">
+            Veja os nossos mais novos produtos
+          </p>
+          <ProductDisplay products={products.newestProducts} />
+        </section>
+        <FeatureDisplay />
+        <section className="grid gap-12">
+          <h2 className="text-center font-heading text-[2rem] font-bold uppercase">
+            Melhor Avaliados
+          </h2>
+          <p className="text-center font-heading text-xl text-neutral-500">
+            Os melhores produtos da nossa loja
+          </p>
+          <ProductDisplay products={products.highestRatedProducts} />
+        </section>
+      </Container>
     </div>
   );
 }

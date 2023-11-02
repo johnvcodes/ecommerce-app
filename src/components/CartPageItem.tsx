@@ -1,13 +1,13 @@
 import { toast } from "react-toastify";
 import { IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
-import { useAppDispatch } from "../store/store";
+import { useAppDispatch } from "@libs/store/store";
 import {
   decreaseQuantity,
   increaseQuantity,
   removeFromCart,
-} from "../store/cartSlice";
+} from "@libs/store/cartSlice";
 import { TCartProduct } from "../@types/product";
-import IconButton from "./IconButton";
+import IconButton from "@components/IconButton";
 
 type Props = { product: TCartProduct };
 

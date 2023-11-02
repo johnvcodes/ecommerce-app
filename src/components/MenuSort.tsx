@@ -1,8 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { ArrowDownWideNarrow, ChevronDown, ChevronUp } from "lucide-react";
-import Menu from "./Menu";
-import Button from "./Button";
+import {
+  IconArrowLeft,
+  IconArrowRight,
+  IconArrowsSort,
+} from "@tabler/icons-react";
+import Button from "@components/Button";
+import Menu from "@components/Menu";
 
 type Props = {
   options: Array<{ label: string; value: string }>;
@@ -12,17 +16,6 @@ function MenuSort({ options }: Props) {
   const [showSort, setShowSort] = useState(false);
 
   const [searchParams, setSearchParams] = useSearchParams();
-
-  const filterRef = useRef<HTMLDivElement>(null);
-
-  function handleClickOut(event: MouseEvent) {
-    if (
-      filterRef.current &&
-      !filterRef.current.contains(event.target as Node)
-    ) {
-      setShowSort(false);
-    }
-  }
 
   function handleChangeSort(value: string) {
     const sortParams = searchParams.get("ordem");
@@ -38,19 +31,11 @@ function MenuSort({ options }: Props) {
     setShowSort(false);
   }
 
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOut);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOut);
-    };
-  });
-
   return (
     <Menu
       isOpen={showSort}
       setIsOpen={setShowSort}
-      position="left"
+      position="right"
       handler={
         <Button
           onClick={() => setShowSort(!showSort)}
@@ -60,29 +45,29 @@ function MenuSort({ options }: Props) {
           aria-expanded={showSort}
           title="Menu de Filtros"
           type="button"
+          variant="secondary"
           size="small"
-          startIcon={
-            <ArrowDownWideNarrow aria-hidden size={20} strokeWidth={1.5} />
-          }
+          startIcon={<IconArrowsSort aria-hidden size={20} strokeWidth={1.5} />}
           endIcon={
             showSort ? (
-              <ChevronUp size={20} strokeWidth={1.5} />
+              <IconArrowLeft aria-hidden size={20} strokeWidth={1.5} />
             ) : (
-              <ChevronDown size={20} strokeWidth={1.5} />
+              <IconArrowRight aria-hidden size={20} strokeWidth={1.5} />
             )
           }
+          className="w-full"
         >
           {options.find((option) => option.value === searchParams.get("ordem"))
             ?.label || "Ordenar"}
         </Button>
       }
     >
-      <div className="flex w-40 flex-col">
+      <div className="flex w-40 flex-col p-1">
         {options.map((option) => (
           <Button
             onClick={() => handleChangeSort(option.value)}
             key={option.value}
-            variant="secondary"
+            variant="tertiary"
             size="small"
           >
             {option.label}

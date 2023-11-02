@@ -1,6 +1,5 @@
 import { nanoid } from "nanoid";
 import {
-  Firestore,
   FirestoreDataConverter,
   Timestamp,
   collection,
@@ -8,22 +7,20 @@ import {
   getDocs,
   setDoc,
 } from "firebase/firestore";
-import { TMainCategory } from "../../@types/categories";
+import { TCategory } from "@/@types/categories";
+import { firestore } from "../config";
 
-const categoryConverter: FirestoreDataConverter<TMainCategory> = {
+const categoryConverter: FirestoreDataConverter<TCategory> = {
   toFirestore(category) {
     return category;
   },
   fromFirestore(snapshot, options) {
     const data = snapshot.data(options);
-    return data as TMainCategory;
+    return data as TCategory;
   },
 };
 
-async function addCategory(
-  firestore: Firestore,
-  categoryData: Omit<TMainCategory, "uid" | "createdAt">,
-) {
+async function addCategory(categoryData: Omit<TCategory, "uid" | "createdAt">) {
   const uid = nanoid(20);
 
   try {
@@ -40,8 +37,8 @@ async function addCategory(
   }
 }
 
-async function getCategories(firestore: Firestore) {
-  const dataCollection: TMainCategory[] = [];
+async function getCategories() {
+  const dataCollection: TCategory[] = [];
 
   try {
     const data = await getDocs(

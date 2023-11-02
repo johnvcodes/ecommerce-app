@@ -1,5 +1,5 @@
 import { Timestamp } from "firebase/firestore";
-import { TMainCategory, TSubcategory } from "./categories";
+import { TCategory, TSubcategory } from "./categories";
 import { TSize } from "./size";
 
 export type TProduct = {
@@ -7,7 +7,7 @@ export type TProduct = {
   title: string;
   price: number;
   stock: number;
-  categories: TMainCategory[];
+  categories: TCategory[];
   subcategory: TSubcategory;
   sizes: TSize[];
   description: string;

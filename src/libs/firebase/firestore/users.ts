@@ -1,12 +1,12 @@
 import {
-  Firestore,
   FirestoreDataConverter,
   Timestamp,
   doc,
   getDoc,
   setDoc,
 } from "firebase/firestore";
-import { TUser } from "../../@types/user";
+import { TUser } from "@/@types/user";
+import { firestore } from "../config";
 
 const userConverter: FirestoreDataConverter<TUser> = {
   toFirestore(user) {
@@ -18,27 +18,24 @@ const userConverter: FirestoreDataConverter<TUser> = {
   },
 };
 
-async function addUser(
-  firestore: Firestore,
-  userData: Omit<TUser, "createdAt">
-) {
+async function addUser(userData: Omit<TUser, "createdAt">) {
   try {
     await setDoc(
       doc(firestore, "users", userData.uid).withConverter(userConverter),
       {
         ...userData,
         createdAt: Timestamp.now(),
-      }
+      },
     );
   } catch (error) {
     throw new Error(String(error));
   }
 }
 
-async function getUser(firestore: Firestore, userUID: string) {
+async function getUser(userUID: string) {
   try {
     const userData = await getDoc(
-      doc(firestore, "users", userUID).withConverter(userConverter)
+      doc(firestore, "users", userUID).withConverter(userConverter),
     );
     if (!userData.exists()) {
       throw new Error("User doesn't exist in the database");

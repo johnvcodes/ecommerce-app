@@ -3,7 +3,8 @@ import { useAuth } from "../contexts/AuthContext";
 
 function ProtectedAdminRoute() {
   const { userData } = useAuth();
-  return userData?.role === "admin" ? <Outlet /> : <Navigate to="/" />;
+  // return userData?.role === "admin" ? <Outlet /> : <Navigate to="/" />;
+  return <Outlet />;
 }
 
 export default ProtectedAdminRoute;

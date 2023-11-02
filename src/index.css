@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-neutral-100 font-lato text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50;
-}
-
 * {
   scrollbar-width: thin;
   scrollbar-color: red;
@@ -21,4 +17,8 @@ body {
 
 *::-webkit-scrollbar-thumb {
   @apply bg-neutral-500;
+}
+
+body {
+  @apply bg-neutral-50 font-body leading-normal text-neutral-950 dark:bg-neutral-950 dark:text-neutral-50;
 }

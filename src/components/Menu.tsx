@@ -6,12 +6,24 @@ import {
   useRef,
 } from "react";
 import useClickAway from "../hooks/useClickAway";
+import clsx from "clsx";
+
+type Position =
+  | "center"
+  | "top-left"
+  | "top"
+  | "top-right"
+  | "right"
+  | "bottom-right"
+  | "bottom"
+  | "bottom-left"
+  | "left";
 
 type Props = Omit<ComponentPropsWithoutRef<"div">, "className"> & {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   handler: ReactNode;
-  position?: "left" | "center" | "right";
+  position?: Position;
 };
 
 function Menu({
@@ -31,15 +43,23 @@ function Menu({
     <div ref={ref} {...rest} className="relative">
       {handler}
       <div
-        id={props["aria-controls"]}
+        id={props["id"]}
         data-open={isOpen}
-        className={`${
-          position === "left"
-            ? "left-0"
-            : position === "right"
-            ? "right-0"
-            : "left-1/2 -translate-x-1/2"
-        } invisible absolute top-[calc(100%_+_0.25rem)] min-w-[7.5rem] border border-neutral-200 bg-neutral-50 opacity-0 transition-opacity data-[open='true']:visible data-[open='true']:opacity-100`}
+        className={clsx(
+          "invisible absolute z-40 min-w-[7.5rem] translate-x-full border border-neutral-200 bg-neutral-50 opacity-0 transition-all duration-300 data-[open='true']:visible data-[open='true']:translate-x-0 data-[open='true']:opacity-100",
+          {
+            "bottom-full": position === "top",
+            "bottom-full left-0": position === "top-left",
+            "bottom-full right-0": position === "top-right",
+            "left-full top-0": position === "right",
+            "top-full": position === "bottom",
+            "left-0 top-full": position === "bottom-left",
+            "right-0 top-full": position === "bottom-right",
+            "right-full top-0": position === "left",
+            "left-1/2 top-[calc(100%_+_0.25rem)] -translate-x-1/2":
+              position === "center",
+          },
+        )}
       >
         {children}
       </div>

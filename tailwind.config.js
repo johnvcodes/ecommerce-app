@@ -12,10 +12,12 @@ export default {
       },
       colors: {
         primary: "#024E82",
+        secondary: "#D6763C",
       },
       fontFamily: {
-        inter: ["Inter Variable", "sans-serif"],
-        lato: ["Lato", "sans-serif"],
+        body: ["Inter Variable", "sans-serif"],
+        heading: ["Lato", "sans-serif"],
+        brand: ["Grenze Gotisch Variable", "sans-serif"],
       },
       backgroundImage: {
         hero: "url('/images/hero.jpg')",
