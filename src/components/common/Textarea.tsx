@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import TextareaAutosize, {
   TextareaAutosizeProps,
 } from "react-textarea-autosize";
-import classNames from "../utilities/class-names";
+import classNames from "@utils/class-names";
 
 type TextareaProps = Omit<TextareaAutosizeProps, "className"> & {
   label: string;

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { ArrowDownWideNarrow, X } from "lucide-react";
-import Button from "@components/Button";
-import Drawer from "@components/Drawer";
+import Button from "@components/common/Button";
+import Drawer from "@components/common/Drawer";
 
 type Props = {
   options: Array<{ label: string; value: string }>;

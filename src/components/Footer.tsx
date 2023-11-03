@@ -6,7 +6,7 @@ import {
   IconChevronsRight,
   IconCopyright,
 } from "@tabler/icons-react";
-import IconButton from "@components/IconButton";
+import IconButton from "@/components/common/IconButton";
 import List from "@components/List";
 
 const productRoutes = ["Todos", "Novos", "Mais Vendidos", "Promoções"];

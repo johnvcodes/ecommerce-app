@@ -2,16 +2,15 @@
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { TProduct } from "../@types/product";
-
-import numberToCurrency from "../utilities/number-to-currency";
-import Button from "../components/Button";
-import Container from "../components/Container";
-import ProductCarousel from "../components/ProductCarousel";
-import Rating from "../components/Rating";
-import { useAppDispatch } from "../libs/store/store";
-import { getProduct } from "../libs/firebase/firestore/products";
-import { addToCart } from "../libs/store/cartSlice";
+import { TProduct } from "@/@types/product";
+import numberToCurrency from "@utils/number-to-currency";
+import Button from "@components/common/Button";
+import Container from "@components/common/Container";
+import ProductCarousel from "@components/ProductCarousel";
+import Rating from "@components/Rating";
+import { useAppDispatch } from "@libs/store/store";
+import { getProduct } from "@libs/firebase/firestore/products";
+import { addToCart } from "@libs/store/cartSlice";
 
 function SingleProduct() {
   const { id } = useParams();
@@ -55,8 +54,6 @@ function SingleProduct() {
       throw new Error(String(error));
     });
   }, [getSingleProduct]);
-
-  console.log(product);
 
   return (
     product && (

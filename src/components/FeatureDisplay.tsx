@@ -4,7 +4,7 @@ import {
   IconTag,
   IconTruckDelivery,
 } from "@tabler/icons-react";
-import { TFeature } from "../@types/feature";
+import { TFeature } from "@/@types/feature";
 import FeatureCard from "@components/FeatureCard";
 
 const features: TFeature[] = [

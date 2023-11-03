@@ -1,17 +1,15 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { TUserCredential } from "../@types/user";
+import { TUserCredentials } from "@/@types/user";
+import Button from "@components/common/Button";
+import Spinner from "@components/Spinner";
+import TextInput from "@components/common/TextInput";
+import Container from "@components/common/Container";
+import loginUser from "@libs/firebase/authentication/login-user";
+import getAuthError from "@libs/firebase/authentication/errors";
 
-import Button from "../components/Button";
-import Spinner from "../components/Spinner";
-import TextInput from "../components/TextInput";
-
-import Container from "../components/Container";
-import loginUser from "../libs/firebase/authentication/login-user";
-import getAuthError from "../libs/firebase/authentication/errors";
-
-type TAccountLogin = Omit<TUserCredential, "displayName">;
+type TAccountLogin = Omit<TUserCredentials, "displayName">;
 
 function AccountLogin() {
   const [authError, setAuthError] = useState<string>("");

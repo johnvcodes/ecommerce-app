@@ -1,5 +1,5 @@
 import { ComponentPropsWithRef, forwardRef } from "react";
-import classNames from "../utilities/class-names";
+import classNames from "@utils/class-names";
 
 type TextInputProps = Omit<ComponentPropsWithRef<"input">, "className"> & {
   label: string;

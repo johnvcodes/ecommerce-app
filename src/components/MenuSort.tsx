@@ -5,8 +5,8 @@ import {
   IconArrowRight,
   IconArrowsSort,
 } from "@tabler/icons-react";
-import Button from "@components/Button";
-import Menu from "@components/Menu";
+import Button from "@components/common/Button";
+import Menu from "@components/common/Menu";
 
 type Props = {
   options: Array<{ label: string; value: string }>;

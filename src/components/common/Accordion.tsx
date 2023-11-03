@@ -1,6 +1,6 @@
 import { ReactNode, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import Button from "@components/Button";
+import Button from "@components/common/Button";
 
 type Props = {
   title: string;
@@ -31,12 +31,11 @@ function Accordion({ title, children }: Props) {
           <ChevronDown size={20} strokeWidth={1.5} />
         )}
       </Button>
-
       <div
         id={title.split(" ").join("-").toLowerCase()}
         data-open={openAccordion}
         aria-hidden={!openAccordion}
-        className="hidden max-h-0 overflow-hidden py-2 transition-all duration-200 data-[open='true']:block data-[open='true']:max-h-screen"
+        className="invisible max-h-0 overflow-hidden transition-all duration-300 ease-in-out data-[open='true']:visible data-[open='true']:max-h-screen"
       >
         {children}
       </div>

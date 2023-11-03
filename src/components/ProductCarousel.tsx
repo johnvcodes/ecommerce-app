@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
-import IconButton from "@components/IconButton";
+import IconButton from "@components/common/IconButton";
 
 type Props = {
   images: string[];

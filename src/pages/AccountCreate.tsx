@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { TUserCredential } from "../@types/user";
-import createUser from "../libs/firebase/authentication/create-user";
-import getAuthError from "../libs/firebase/authentication/errors";
-import Button from "../components/Button";
-import Spinner from "../components/Spinner";
-import TextInput from "../components/TextInput";
-import Container from "../components/Container";
+import { TUserCredentials } from "@/@types/user";
+import createUser from "@libs/firebase/authentication/create-user";
+import getAuthError from "@libs/firebase/authentication/errors";
+import Button from "@components/common/Button";
+import Spinner from "@components/Spinner";
+import TextInput from "@components/common/TextInput";
+import Container from "@components/common/Container";
 
-type TAccountCreate = TUserCredential & { confirmPassword: string };
+type TAccountCreate = TUserCredentials & { confirmPassword: string };
 
 function AccountCreate() {
   const [authError, setAuthError] = useState<string>("");

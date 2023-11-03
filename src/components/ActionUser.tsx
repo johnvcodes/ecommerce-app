@@ -2,12 +2,12 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { User } from "lucide-react";
 import { signOut } from "firebase/auth";
-import { auth } from "@libs/firebase/config";
 import { useAuth } from "../contexts/AuthContext";
-import getErrorMessage from "../utilities/get-error-message";
-import Button from "@components/Button";
-import IconButton from "@components/IconButton";
-import Menu from "@components/Menu";
+import { auth } from "@libs/firebase/config";
+import getErrorMessage from "@utils/get-error-message";
+import Button from "@components/common/Button";
+import IconButton from "@components/common/IconButton";
+import Menu from "@components/common/Menu";
 
 function ActionUser() {
   const navigate = useNavigate();
@@ -32,6 +32,7 @@ function ActionUser() {
       setIsOpen={setShowMenu}
       aria-hidden={!showMenu}
       id="user-menu"
+      position="bottom-right"
       handler={
         <IconButton
           onClick={() => setShowMenu(!showMenu)}

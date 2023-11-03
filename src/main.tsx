@@ -7,7 +7,7 @@ import "@fontsource-variable/grenze-gotisch";
 import "@fontsource/lato/400.css";
 import "@fontsource/lato/700.css";
 import "@fontsource/lato/900.css";
-import { store } from "./libs/store/store";
+import { store } from "@libs/store/store";
 import App from "./App";
 import Home from "@pages/Home";
 import Login from "@pages/AccountLogin";

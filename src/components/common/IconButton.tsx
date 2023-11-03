@@ -1,5 +1,5 @@
 import { ElementType } from "react";
-import classNames from "../utilities/class-names";
+import classNames from "@utils/class-names";
 
 export type Props<T extends ElementType> = {
   component?: T;

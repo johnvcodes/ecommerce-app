@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { limit, orderBy } from "firebase/firestore";
-
-import { TProduct } from "../@types/product";
-import getErrorMessage from "../utilities/get-error-message";
-import Hero from "../components/Hero";
-import ProductDisplay from "../components/ProductDisplay";
-import FeatureDisplay from "../components/FeatureDisplay";
-import { getProducts } from "../libs/firebase/firestore/products";
-import Container from "@/components/Container";
+import { TProduct } from "@/@types/product";
+import getErrorMessage from "@utils/get-error-message";
+import Hero from "@components/Hero";
+import ProductDisplay from "@components/ProductDisplay";
+import FeatureDisplay from "@components/FeatureDisplay";
+import { getProducts } from "@libs/firebase/firestore/products";
+import Container from "@components/common/Container";
 
 function Home() {
   const [products, setProducts] = useState<{

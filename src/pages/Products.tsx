@@ -8,13 +8,13 @@ import {
 } from "firebase/firestore";
 import { ChevronRight } from "lucide-react";
 
-import { TProduct } from "../@types/product";
-import Button from "../components/Button";
-import ProductDisplay from "../components/ProductDisplay";
-import ProductsOptions from "../components/ProductsOptions";
-import Spinner from "../components/Spinner";
-import { getProducts } from "../libs/firebase/firestore/products";
-import Container from "@/components/Container";
+import { TProduct } from "@/@types/product";
+import Button from "@components/common/Button";
+import ProductDisplay from "@components/ProductDisplay";
+import ProductsOptions from "@components/ProductsOptions";
+import Spinner from "@components/Spinner";
+import { getProducts } from "@libs/firebase/firestore/products";
+import Container from "@components/common/Container";
 
 type SortParam = "maior-preço" | "menor-preço" | "novo" | "melhor-avaliados";
 

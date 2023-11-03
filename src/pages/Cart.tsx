@@ -1,6 +1,6 @@
 import { useAppSelector } from "../libs/store/store";
-import CartPageItem from "../components/CartPageItem";
-import Button from "../components/Button";
+import CartPageItem from "@components/CartPageItem";
+import Button from "@components/common/Button";
 
 function Cart() {
   const { cart, total } = useAppSelector((state) => state.cartReducer);

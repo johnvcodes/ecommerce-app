@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import Button from "@components/Button";
-import Container from "./Container";
+import Button from "@components/common/Button";
+import Container from "@components/common/Container";
 
 type Props = {
   content: string;

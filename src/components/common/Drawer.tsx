@@ -5,7 +5,7 @@ import {
   SetStateAction,
   useRef,
 } from "react";
-import useClickAway from "../hooks/useClickAway";
+import useClickAway from "../../hooks/useClickAway";
 
 type Props = Omit<ComponentPropsWithRef<"div">, "className"> & {
   isOpen: boolean;

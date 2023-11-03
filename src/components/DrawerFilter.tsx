@@ -1,11 +1,11 @@
 import { ChangeEvent, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Settings2, X } from "lucide-react";
-import { TCategory } from "../@types/categories";
-import Accordion from "@components/Accordion";
-import Button from "@components/Button";
-import Drawer from "@components/Drawer";
-import Checkbox from "@components/Checkbox";
+import { TCategory } from "@/@types/categories";
+import Accordion from "@components/common/Accordion";
+import Button from "@components/common/Button";
+import Drawer from "@components/common/Drawer";
+import Checkbox from "@components/common/Checkbox";
 
 type Props = {
   categories: TCategory[];

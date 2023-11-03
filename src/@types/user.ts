@@ -8,8 +8,6 @@ export type TUser = {
   createdAt: Timestamp;
 };
 
-export type TUserCredential = {
-  displayName: string;
-  email: string;
+export type TUserCredentials = Pick<TUser, "displayName" | "email"> & {
   password: string;
 };

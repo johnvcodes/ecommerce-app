@@ -7,7 +7,7 @@ import {
   removeFromCart,
 } from "@libs/store/cartSlice";
 import { TCartProduct } from "../@types/product";
-import IconButton from "@components/IconButton";
+import IconButton from "@components/common/IconButton";
 
 type Props = { product: TCartProduct };
 

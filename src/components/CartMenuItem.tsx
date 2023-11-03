@@ -7,7 +7,7 @@ import {
   increaseQuantity,
   removeFromCart,
 } from "@libs/store/cartSlice";
-import Divider from "@components/Divider";
+import Divider from "@components/common/Divider";
 
 type Props = {
   product: TCartProduct;
